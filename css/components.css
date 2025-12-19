@@ -1,0 +1,45 @@
+/* Loader */
+.loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Navigation & Typography */
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Navbar Scrolled State */
+nav {
+  transition: all 0.3s ease;
+}
+
+nav.nav-scrolled {
+  background-color: rgba(10, 10, 10, 0.8); /* Warna gelap transparan */
+  backdrop-filter: blur(12px); /* Efek blur/kaca */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  mix-blend-mode: normal !important; /* Matikan blend mode biar teks jelas */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}

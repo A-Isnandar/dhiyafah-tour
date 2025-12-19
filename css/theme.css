@@ -1,0 +1,114 @@
+/* css/theme.css */
+
+/* === LIGHT MODE OVERRIDES === */
+/* Kita override warna-warna Tailwind yang hardcoded di HTML saat mode light aktif */
+
+[data-theme='light'] body {
+  background-color: #f9fafb; /* Gray 50 */
+  color: #1f2937; /* Gray 800 */
+}
+
+/* 1. Backgrounds */
+[data-theme='light'] .bg-dark,
+[data-theme='light'] .bg-black,
+[data-theme='light'] .bg-\[\#0c0c0c\] {
+  background-color: #ffffff !important;
+}
+
+/* 2. Typography */
+[data-theme='light'] .text-white {
+  color: #111827 !important; /* Gray 900 (Hampir Hitam) */
+}
+
+[data-theme='light'] .text-gray-300,
+[data-theme='light'] .text-gray-400,
+[data-theme='light'] .text-gray-500 {
+  color: #4b5563 !important; /* Gray 600 (Abu Gelap) */
+}
+
+/* 3. Cards & Borders */
+[data-theme='light'] .border-gray-800,
+[data-theme='light'] .border-gray-900 {
+  border-color: #e5e7eb !important; /* Gray 200 */
+}
+
+[data-theme='light'] .bg-white\/5 {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.05
+  ) !important; /* Ubah card transparan jadi agak gelap */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 4. Navbar Specific */
+/* Saat discroll, navbar jadi putih blur, bukan hitam */
+[data-theme='light'] nav.nav-scrolled {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Matikan mix-blend di mode light biar warnanya normal (hitam di atas putih) */
+[data-theme='light'] nav {
+  mix-blend-mode: normal !important;
+  color: #111827;
+}
+
+/* 5. Components Specific */
+[data-theme='light'] .loader {
+  background-color: #ffffff !important;
+}
+
+/* Modal Background */
+[data-theme='light'] #modalBackdrop {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+[data-theme='light'] #majorModal .bg-dark {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+[data-theme='light'] .bg-gray-900 {
+  background-color: #f3f4f6 !important; /* Gray 100 */
+}
+
+/* 1. Area Expanding Gallery (Life at Yadika) */
+[data-theme='light'] #expandingGallery .text-white,
+[data-theme='light'] #expandingGallery .text-gray-300,
+[data-theme='light'] #expandingGallery .text-gray-400,
+[data-theme='light'] #expandingGallery .text-gray-500 {
+  color: #ffffff !important;
+}
+
+/* 2. Area Swiper Slider (Ekstrakurikuler) */
+[data-theme='light'] .swiper-slide .text-white,
+[data-theme='light'] .swiper-slide .text-gray-300,
+[data-theme='light'] .swiper-slide .text-gray-400 {
+  color: #ffffff !important;
+}
+
+/* 3. Area Majors (Jurusan) - Judul Besar & Deskripsi di atas gambar */
+[data-theme='light'] .major-item .text-gray-300,
+[data-theme='light'] .major-item .group-hover\:text-white:hover {
+  /* Biar teks jurusan (TKJ/Perbankan) tetap kontras di light mode */
+  color: #374151 !important; /* Gray-700 untuk teks biasa */
+}
+/* Khusus hover state di Light Mode agar tetap terlihat */
+[data-theme='light'] .major-item:hover .text-gray-300,
+[data-theme='light'] .major-item:hover h3 {
+  color: #111827 !important; /* Jadi hitam pekat saat hover */
+}
+
+/* ... codingan theme.css sebelumnya ... */
+
+/* 4. Area Hero Section (Home) */
+/* Paksa semua teks di Hero tetap putih karena backgroundnya gambar gelap */
+[data-theme="light"] #home .text-white,
+[data-theme="light"] #home .text-gray-300,
+[data-theme="light"] #home .text-gray-400 {
+    color: #ffffff !important;
+}

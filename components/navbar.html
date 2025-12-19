@@ -1,0 +1,79 @@
+<nav
+  class="fixed w-full top-0 z-50 px-6 py-4 mix-blend-difference text-white transition-all duration-300"
+>
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <a
+      href="#"
+      class="font-display font-bold text-2xl tracking-tighter hoverable flex items-center gap-3"
+      data-cursor="hover"
+    >
+      <img
+        src="/assets/logo-yadika-warna.png"
+        alt="Logo Sekolah"
+        class="h-8 w-auto rounded-full object-contain"
+      />
+      <span>YADIKA<span class="text-primary">.</span></span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      <div class="flex gap-8 font-sans text-sm tracking-widest uppercase">
+        <a href="#home" class="nav-link relative hoverable">Home</a>
+        <a href="#profile" class="nav-link relative hoverable">Profil</a>
+        <a href="#ppdb" class="nav-link relative hoverable">PPDB</a>
+        <a href="#berita" class="nav-link relative hoverable">Berita</a>
+      </div>
+
+      <div class="w-[1px] h-4 bg-white/20"></div>
+
+      <button
+        class="theme-toggle hoverable text-xl transition-transform hover:rotate-12 active:scale-90"
+        aria-label="Toggle Theme"
+      >
+        <i class="fa-solid fa-sun hidden dark-icon text-yellow-400"></i>
+        <i class="fa-solid fa-moon light-icon"></i>
+      </button>
+    </div>
+
+    <div class="md:hidden flex items-center gap-6">
+      <button
+        class="theme-toggle hoverable text-xl transition-transform active:scale-90"
+        aria-label="Toggle Theme"
+      >
+        <i class="fa-solid fa-sun hidden dark-icon text-yellow-400"></i>
+        <i class="fa-solid fa-moon light-icon"></i>
+      </button>
+
+      <button
+        class="text-2xl hoverable z-50 relative w-8 h-8 flex items-center justify-center"
+        id="menuToggle"
+      >
+        <i
+          class="fa-solid fa-bars-staggered transition-transform duration-300"
+          id="menuIcon"
+        ></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div
+  class="fixed inset-0 bg-dark z-40 transform translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] flex items-center justify-center"
+  id="mobileMenu"
+>
+  <div
+    class="flex flex-col gap-6 text-center font-display text-4xl md:text-5xl font-bold"
+  >
+    <a href="#home" class="mobile-link overflow-hidden block"
+      ><span class="block translate-y-full">Home</span></a
+    >
+    <a href="#profile" class="mobile-link overflow-hidden block"
+      ><span class="block translate-y-full">Profil</span></a
+    >
+    <a href="#ppdb" class="mobile-link overflow-hidden block"
+      ><span class="block translate-y-full">PPDB</span></a
+    >
+    <a href="#berita" class="mobile-link overflow-hidden block"
+      ><span class="block translate-y-full">Berita</span></a
+    >
+  </div>
+</div>
