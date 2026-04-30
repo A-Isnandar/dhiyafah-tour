@@ -3,11 +3,12 @@ const components = [
     { id: 'preloader-container', file: 'components/preloader.html' },
     { id: 'navbar-container', file: 'components/navbar.html' },
     { id: 'hero-container', file: 'components/hero.html' },
-    { id: 'philosophy-container', file: 'components/philosophy.html' },
-    { id: 'highlights-container', file: 'components/highlights.html' },
-    { id: 'majors-container', file: 'components/majors.html' },
-    { id: 'ppdb-container', file: 'components/ppdb.html' },
-    { id: 'news-container', file: 'components/news.html' },
+    { id: 'vision-container', file: 'components/vision.html' },
+    { id: 'about-container', file: 'components/about.html' },
+    { id: 'services-container', file: 'components/services.html' },
+    { id: 'howto-container', file: 'components/howto.html' },
+    { id: 'testimonials-container', file: 'components/testimonials.html' },
+    { id: 'certifications-container', file: 'components/certifications.html' },
     { id: 'footer-container', file: 'components/footer.html' }
 ];
 

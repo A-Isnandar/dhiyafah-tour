@@ -1,82 +1,91 @@
-/* css/theme.css */
+/* css/theme.css — Dhiyafah Tour */
 
 /* === LIGHT MODE OVERRIDES === */
-/* Kita override warna-warna Tailwind yang hardcoded di HTML saat mode light aktif */
 
 [data-theme='light'] body {
-  background-color: #f9fafb; /* Gray 50 */
-  color: #1f2937; /* Gray 800 */
+  background-color: #f0f4ff; /* Light Navy Tint */
+  color: #0B1E59; /* Navy text */
 }
 
 /* 1. Backgrounds */
 [data-theme='light'] .bg-dark,
 [data-theme='light'] .bg-black,
-[data-theme='light'] .bg-\[\#0c0c0c\] {
+[data-theme='light'] .bg-\[\#0c0c0c\],
+[data-theme='light'] .bg-\[\#040c1e\],
+[data-theme='light'] .bg-\[\#030a18\] {
   background-color: #ffffff !important;
 }
 
 /* 2. Typography */
 [data-theme='light'] .text-white {
-  color: #111827 !important; /* Gray 900 (Hampir Hitam) */
+  color: #0B1E59 !important; /* Navy (Hampir Hitam) */
 }
 
 [data-theme='light'] .text-gray-300,
 [data-theme='light'] .text-gray-400,
 [data-theme='light'] .text-gray-500 {
-  color: #4b5563 !important; /* Gray 600 (Abu Gelap) */
+  color: #3a4e7a !important; /* Navy medium */
+}
+
+[data-theme='light'] .text-gray-600 {
+  color: #6b7fa8 !important;
 }
 
 /* 3. Cards & Borders */
 [data-theme='light'] .border-gray-800,
-[data-theme='light'] .border-gray-900 {
-  border-color: #e5e7eb !important; /* Gray 200 */
+[data-theme='light'] .border-gray-900,
+[data-theme='light'] .border-white\/5,
+[data-theme='light'] .border-white\/10 {
+  border-color: #d4daf0 !important;
 }
 
 [data-theme='light'] .bg-white\/5 {
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.05
-  ) !important; /* Ubah card transparan jadi agak gelap */
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(11, 30, 89, 0.04) !important;
+  border: 1px solid rgba(11, 30, 89, 0.1);
 }
 
 [data-theme='light'] .bg-white\/10 {
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(11, 30, 89, 0.08) !important;
 }
 
 /* 4. Navbar Specific */
-/* Saat discroll, navbar jadi putih blur, bukan hitam */
 [data-theme='light'] nav.nav-scrolled {
-  background-color: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 30px rgba(11, 30, 89, 0.08);
 }
 
-/* Matikan mix-blend di mode light biar warnanya normal (hitam di atas putih) */
 [data-theme='light'] nav {
   mix-blend-mode: normal !important;
-  color: #111827;
+  color: #0B1E59;
 }
 
-/* 5. Components Specific */
+/* Light mode: nav link & brand text stays navy */
+[data-theme='light'] nav a,
+[data-theme='light'] nav span {
+  color: #0B1E59 !important;
+}
+
+/* Keep accent (gold) color in both modes */
+[data-theme='light'] .text-accent {
+  color: #c8960a !important; /* Slightly darker gold for light bg legibility */
+}
+
+/* 5. Components */
 [data-theme='light'] .loader {
-  background-color: #ffffff !important;
+  background-color: #f0f4ff !important;
 }
 
 /* Modal Background */
-[data-theme='light'] #modalBackdrop {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-}
-[data-theme='light'] #majorModal .bg-dark {
+[data-theme='light'] #serviceModal .bg-dark {
   background-color: #ffffff !important;
-  color: #111827 !important;
-}
-[data-theme='light'] .bg-gray-900 {
-  background-color: #f3f4f6 !important; /* Gray 100 */
+  color: #0B1E59 !important;
 }
 
-/* 1. Area Expanding Gallery (Life at Yadika) */
+[data-theme='light'] .bg-gray-900 {
+  background-color: #eef1fb !important;
+}
+
+/* 6. Gallery Area (keep text white since it overlays images) */
 [data-theme='light'] #expandingGallery .text-white,
 [data-theme='light'] #expandingGallery .text-gray-300,
 [data-theme='light'] #expandingGallery .text-gray-400,
@@ -84,31 +93,43 @@
   color: #ffffff !important;
 }
 
-/* 2. Area Swiper Slider (Ekstrakurikuler) */
+/* 7. Swiper Slider (keep white text on dark image cards) */
 [data-theme='light'] .swiper-slide .text-white,
 [data-theme='light'] .swiper-slide .text-gray-300,
 [data-theme='light'] .swiper-slide .text-gray-400 {
   color: #ffffff !important;
 }
 
-/* 3. Area Majors (Jurusan) - Judul Besar & Deskripsi di atas gambar */
-[data-theme='light'] .major-item .text-gray-300,
-[data-theme='light'] .major-item .group-hover\:text-white:hover {
-  /* Biar teks jurusan (TKJ/Perbankan) tetap kontras di light mode */
-  color: #374151 !important; /* Gray-700 untuk teks biasa */
-}
-/* Khusus hover state di Light Mode agar tetap terlihat */
-[data-theme='light'] .major-item:hover .text-gray-300,
-[data-theme='light'] .major-item:hover h3 {
-  color: #111827 !important; /* Jadi hitam pekat saat hover */
+/* 8. Hero Section (force white text on dark hero bg) */
+[data-theme='light'] #home .text-white,
+[data-theme='light'] #home .text-gray-300,
+[data-theme='light'] #home .text-gray-400 {
+  color: #ffffff !important;
 }
 
-/* ... codingan theme.css sebelumnya ... */
+/* 9. Mobile Menu Light Mode */
+[data-theme='light'] #mobileMenu {
+  background-color: #ffffff !important;
+}
+[data-theme='light'] #mobileMenu a {
+  color: #0B1E59 !important;
+}
 
-/* 4. Area Hero Section (Home) */
-/* Paksa semua teks di Hero tetap putih karena backgroundnya gambar gelap */
-[data-theme="light"] #home .text-white,
-[data-theme="light"] #home .text-gray-300,
-[data-theme="light"] #home .text-gray-400 {
-    color: #ffffff !important;
+/* 10. Testimonial & Certification cards */
+[data-theme='light'] .cert-badge,
+[data-theme='light'] .news-card > div {
+  background-color: rgba(11, 30, 89, 0.04) !important;
+  border-color: rgba(11, 30, 89, 0.12) !important;
+}
+
+/* 11. Footer */
+[data-theme='light'] footer {
+  background-color: #0B1E59 !important;
+}
+[data-theme='light'] footer .text-gray-500,
+[data-theme='light'] footer .text-gray-600 {
+  color: rgba(255,255,255,0.6) !important;
+}
+[data-theme='light'] footer .text-white {
+  color: #ffffff !important;
 }

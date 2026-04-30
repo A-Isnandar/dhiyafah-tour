@@ -1,7 +1,15 @@
-/* Timeline */
+/* css/sections.css — Dhiyafah Tour */
+
+/* === HERO TEXT OUTLINE GOLD === */
+.text-outline-gold {
+  -webkit-text-stroke: 2px #ffc000;
+  color: transparent;
+}
+
+/* === Timeline Line === */
 .timeline-line {
   width: 2px;
-  background: linear-gradient(to bottom, #3b82f6, #eab308);
+  background: linear-gradient(to bottom, #ffc000, #0b1e59);
   position: absolute;
   left: 50%;
   top: 0;
@@ -9,100 +17,77 @@
   height: 0%;
 }
 
-/* Hover Reveal Section (Jurusan) */
-.major-item {
+/* === Hover Reveal Section (Services/Layanan) === */
+.service-item {
   transition: opacity 0.3s;
 }
-.majors-container:hover .major-item {
+.services-container:hover .service-item {
   opacity: 0.3;
 }
-.majors-container .major-item:hover {
+.services-container .service-item:hover {
   opacity: 1;
 }
 
-.major-reveal-img {
+.service-reveal-img {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.8);
-  width: 400px;
-  height: 500px;
+  width: 350px;
+  height: 450px;
   object-fit: cover;
   opacity: 0;
   pointer-events: none;
   z-index: 0;
-  transition: opacity 0.3s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: grayscale(100%);
+  transition:
+    opacity 0.3s,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: grayscale(60%);
 }
-.major-reveal-img.active {
-  opacity: 0.6;
+.service-reveal-img.active {
+  opacity: 0.5;
   transform: translate(-50%, -50%) scale(1) rotate(2deg);
 }
 
-/* --- EXPANDING GALLERY --- */
-
-/* Default State (Mobile) */
+/* === EXPANDING GALLERY === */
 .gallery-card {
-  flex: 1; /* Ukuran awal sama rata */
+  flex: 1;
 }
-
-/* Active State (Expanded) */
 .gallery-card.active {
-  flex: 5; /* Card yang aktif akan 5x lebih besar */
+  flex: 5;
 }
 
-/* Hover State (Desktop Only) */
 @media (min-width: 768px) {
-  /* Saat parent di-hover, card yang aktif (default) kembali mengecil jadi 1 */
   #expandingGallery:hover .gallery-card.active {
     flex: 1;
   }
-
-  /* Card yang sedang di-hover user akan membesar jadi 5 */
   #expandingGallery .gallery-card:hover {
     flex: 5 !important;
   }
-
-  /* Logic untuk opacity text saat hover diurus via group-hover Tailwind di HTML */
 }
 
-/* ... codingan sebelumnya ... */
-
-/* --- FIX EXPANDING GALLERY TEXT --- */
-
-/* 1. Atur Default Text Container (Sembunyi dulu) */
+/* Gallery Text Logic */
 .gallery-text {
   opacity: 0;
   transition: opacity 0.5s ease;
   transition-delay: 0.1s;
 }
-
-/* 2. State Mobile & Default Desktop (Kalau ada class .active, teks muncul) */
 .gallery-card.active .gallery-text {
   opacity: 1;
 }
 
-/* 3. Logic Desktop Hover (PENTING) */
 @media (min-width: 768px) {
-  /* Kalau card di-hover mouse, paksa teks muncul (walaupun gak punya class active) */
   .gallery-card:hover .gallery-text {
     opacity: 1 !important;
   }
-
-  /* Kalau area gallery disorot mouse, TAPI kursor bukan di card yang aktif:
-       Sembunyikan teks milik card active (karena dia lagi mengecil) */
   #expandingGallery:hover .gallery-card.active:not(:hover) .gallery-text {
     opacity: 0 !important;
-    transition-delay: 0s; /* Hilang instan biar gak numpuk */
+    transition-delay: 0s;
   }
-
-  /* Logic Judul Vertikal (Kebalikan dari Text) */
   .vertical-title {
     opacity: 1;
     transition: opacity 0.3s;
   }
-
-  /* Sembunyikan judul vertikal kalau card lagi mekar (hovered atau active default) */
   .gallery-card:hover .vertical-title,
   .gallery-card.active:not(
       #expandingGallery:hover .gallery-card.active:not(:hover)
@@ -110,43 +95,50 @@
     .vertical-title {
     opacity: 0;
   }
-
-  /* Munculkan kembali judul vertikal card active JIKA dia lagi mengecil (karena user hover card lain) */
   #expandingGallery:hover .gallery-card.active:not(:hover) .vertical-title {
     opacity: 1;
     transition-delay: 0.2s;
   }
 }
-/* ... codingan sebelumnya ... */
 
-/* --- MAJORS MODAL --- */
-#majorModal {
-  /* Pastikan z-index lebih tinggi dari navbar (z-50) dan cursor (z-9999) */
-  /* Kita set cursor jadi default di dalam modal agar user mudah klik close */
+/* === SERVICE MODAL === */
+#serviceModal {
   cursor: auto;
 }
-
-/* Scrollbar khusus untuk modal konten */
-#majorModal ::-webkit-scrollbar {
-  width: 8px;
+#serviceModal ::-webkit-scrollbar {
+  width: 6px;
 }
-#majorModal ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+#serviceModal ::-webkit-scrollbar-track {
+  background: #040c1e;
 }
-#majorModal ::-webkit-scrollbar-thumb {
-  background: #333;
+#serviceModal ::-webkit-scrollbar-thumb {
+  background: #1a3080;
   border-radius: 4px;
 }
-#majorModal ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+#serviceModal ::-webkit-scrollbar-thumb:hover {
+  background: #ffc000;
 }
 
-/* ... codingan css sebelumnya ... */
-
-/* --- PPDB BIG NUMBER COLOR OVERRIDE --- */
-/* Override khusus untuk angka 01, 02, 03, 04 di section PPDB */
-/* Kita ganti warna transparannya jadi RGB(89,83,83) opacity 85% */
-#ppdb .text-white\/5 {
-    color: rgb(89 83 83 / 85%) !important;
+/* === HOWTO TIMELINE BIG NUMBER COLOR === */
+#howto-section .text-white\/5 {
+  color: rgb(255 192 0 / 8%) !important;
 }
 
+/* === CERTIFICATION BADGES GLOW ON HOVER === */
+.cert-badge:hover {
+  box-shadow: 0 8px 32px rgba(255, 192, 0, 0.1);
+}
+
+/* === WA Floating Button pulse animation === */
+.wa-floating-btn {
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+@keyframes wa-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+  }
+}

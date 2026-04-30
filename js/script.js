@@ -1,4 +1,4 @@
-// js/script.js
+// js/script.js — Dhiyafah Tour
 
 // 1. Initialize Lenis (Smooth Scrolling)
 const lenis = new Lenis({
@@ -20,11 +20,9 @@ requestAnimationFrame(raf);
 
 // 2. Custom Cursor Logic
 const cursor = document.getElementById('cursor');
-// Kita select ulang .hoverable karena elemennya baru masuk ke DOM
 const hoverables = document.querySelectorAll('.hoverable');
 
 document.addEventListener('mousemove', (e) => {
-  // Safety check kalau cursor ada
   if (cursor) {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
@@ -32,14 +30,14 @@ document.addEventListener('mousemove', (e) => {
 });
 
 hoverables.forEach((el) => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+  el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hovered'));
 });
 
 // 3. GSAP Animations
 gsap.registerPlugin(ScrollTrigger);
 
-// Loader Animation (Transisi pembuka)
+// Loader Animation
 const loaderTimeline = gsap.timeline();
 loaderTimeline
   .to('.loader-bar', { width: '100%', duration: 1.5, ease: 'power2.inOut' })
@@ -51,7 +49,7 @@ loaderTimeline
   .to('.loader', { y: '-100%', duration: 1, ease: 'power4.inOut', delay: 0.5 });
 
 // Hero Animations
-const heroTimeline = gsap.timeline({ delay: 3 }); // Delay nunggu loader kelar
+const heroTimeline = gsap.timeline({ delay: 3 });
 heroTimeline.to('.hero-anim', {
   y: 0,
   duration: 1.5,
@@ -71,11 +69,11 @@ gsap.to('#hero-bg', {
   scale: 1.2,
 });
 
-// Tan Malaka Quote Reveal
-const quoteElement = document.getElementById('tm-quote');
-if (quoteElement) {
-  const quoteText = quoteElement.innerText;
-  quoteElement.innerHTML = quoteText
+// Vision Quote Reveal
+const visionQuote = document.getElementById('vision-quote');
+if (visionQuote) {
+  const quoteText = visionQuote.innerText;
+  visionQuote.innerHTML = quoteText
     .split(' ')
     .map(
       (word) =>
@@ -85,7 +83,7 @@ if (quoteElement) {
 
   gsap.to('.quote-word', {
     scrollTrigger: {
-      trigger: '#tan-malaka',
+      trigger: '#vision-section',
       start: 'top 70%',
     },
     opacity: 1,
@@ -96,9 +94,9 @@ if (quoteElement) {
   });
 }
 
-gsap.to('#tm-image', {
+gsap.to('#vision-image', {
   scrollTrigger: {
-    trigger: '#tan-malaka',
+    trigger: '#vision-section',
     start: 'top bottom',
     end: 'bottom top',
     scrub: 1,
@@ -107,127 +105,128 @@ gsap.to('#tm-image', {
   scale: 1,
 });
 
-// ... kode-kode sebelumnya ...
+// --- SERVICES INTERACTIVE LOGIC (HOVER + MODAL) ---
 
-// --- MAJORS INTERACTIVE LOGIC (HOVER + MODAL) ---
-
-// 1. Database Konten Jurusan
-const majorsData = {
-  tkj: {
-    category: 'TEKNOLOGI INFORMASI',
-    title: 'TKJ',
-    fullTitle: 'Teknik Komputer & Jaringan',
-    img: '/assets/img/tkj.png',
-    desc: 'Membekali siswa dengan keahlian tingkat lanjut dalam merakit, mengelola, dan mengamankan jaringan komputer. Program ini dirancang dengan standar industri terkini untuk mencetak teknisi jaringan yang handal.',
+// 1. Database Konten Layanan
+const servicesData = {
+  'umrah-reguler': {
+    category: 'PAKET UMRAH',
+    title: 'Umrah Reguler',
+    fullTitle: 'Umrah Reguler',
+    img: '/assets/img/gallery-umrah.png',
+    desc: 'Paket umrah terjangkau dengan jadwal keberangkatan rutin, fasilitas lengkap, dan pendampingan mutawwif berpengalaman. Cocok untuk jamaah yang menginginkan perjalanan ibadah yang fokus dan khusyuk.',
     points: [
-      'Laboratorium Standar Industri (Mikrotik Academy)',
-      'Kurikulum berbasis Fiber Optic & Cloud Computing',
-      'Fokus pada Cyber Security Dasar',
-      'Praktek Instalasi Jaringan LAN/WAN Real Device',
+      'Hotel bintang 3–4 dekat Masjidil Haram & Masjid Nabawi',
+      'Tiket pesawat PP dengan maskapai terpercaya',
+      'Mutawwif berpengalaman & bersertifikat',
+      'Visa umrah resmi & asuransi perjalanan',
+      'Konsumsi 3x sehari selama di tanah suci',
     ],
     career:
-      'Network Engineer, System Administrator, IT Support, Teknisi Fiber Optic, Cyber Security Analyst.',
+      'Akomodasi, transportasi, konsumsi, visa, asuransi, bimbingan ibadah, dan perlengkapan umrah (kain ihram, buku panduan).',
   },
-  perbankan: {
-    category: 'BISNIS & MANAJEMEN',
-    title: 'Perbankan',
-    fullTitle: 'Layanan Perbankan',
-    img: '/assets/img/perbankan.png',
-    desc: 'Program keahlian yang fokus pada penguasaan administrasi keuangan, akuntansi perbankan, dan layanan nasabah yang profesional. Menggabungkan teori akuntansi modern dengan etika layanan prima.',
+  'umrah-plus': {
+    category: 'UMRAH PLUS DESTINASI',
+    title: 'Umrah Plus',
+    fullTitle: 'Umrah Plus (Turki / Aqsa / Kairo)',
+    img: '/assets/img/gallery-istanbul.png',
+    desc: 'Gabungkan ibadah umrah dengan wisata ke destinasi-destinasi peradaban Islam yang menakjubkan — Istanbul Turki, Masjidil Aqsa Palestina, atau Kairo Mesir. Sebuah perjalanan spiritual yang tak terlupakan.',
     points: [
-      'Mini Bank YADIKA (Simulasi Transaksi Riil)',
-      'Sertifikasi Komputer Akuntansi (MYOB/Zahir)',
-      'Laboratorium Simulasi Kasir & Teller',
-      'Kerjasama Magang dengan Bank Nasional & BUMN',
+      'Semua fasilitas Umrah Reguler Premium',
+      'Tambahan destinasi wisata Islam (Turki / Aqsa / Kairo)',
+      'Hotel bintang 4–5 di semua destinasi',
+      'Tour guide lokal berbahasa Indonesia',
+      'Jadwal kunjungan situs sejarah Islam',
     ],
     career:
-      'Teller Bank, Customer Service, Staff Administrasi Keuangan, Akuntan Junior, Kasir Profesional.',
+      'Paket all-inclusive: Umrah lengkap + tiket antar destinasi, hotel di semua kota, tour guide lokal, dan dokumentasi perjalanan.',
+  },
+  haji: {
+    category: 'IBADAH HAJI',
+    title: 'Paket Haji',
+    fullTitle: 'Paket Haji Reguler & Plus',
+    img: '/assets/img/gallery-haji.png',
+    desc: 'Layanan haji lengkap dengan pendampingan penuh dari keberangkatan hingga kepulangan. Tim Dhiyafah Tour memastikan setiap jamaah dapat menjalani ibadah haji dengan khusyuk, aman, dan sesuai syariat.',
+    points: [
+      'Pendampingan mutawwif & pembimbing ibadah bersertifikat',
+      'Hotel dekat Masjidil Haram (Makkah) & Masjid Nabawi (Madinah)',
+      'Transportasi premium antar kota suci',
+      'Konsultasi kesehatan & pendampingan jamaah lansia',
+      'Laporan perkembangan jamaah real-time kepada keluarga',
+    ],
+    career:
+      'Layanan end-to-end: pengurusan dokumen haji, akomodasi premium, konsumsi, transportasi, perlengkapan, dan pendampingan penuh selama di tanah suci.',
   },
 };
 
-// 2. Hover Image Reveal Logic (Existing)
-const majorsContainer = document.querySelector('.majors-container');
-const revealImg = document.querySelector('.major-reveal-img');
-const majorItems = document.querySelectorAll('.major-item');
+// 2. Hover Image Reveal Logic
+const servicesContainer = document.querySelector('.services-container');
+const serviceRevealImg = document.querySelector('.service-reveal-img');
+const serviceItems = document.querySelectorAll('.service-item');
 
-// Hover Logic
-if (majorsContainer) {
-  majorItems.forEach((item) => {
+if (servicesContainer) {
+  serviceItems.forEach((item) => {
     // Hover Effect (Desktop Only)
     item.addEventListener('mouseenter', () => {
       const imgUrl = item.getAttribute('data-img');
-      if (revealImg && window.innerWidth > 768) {
-        revealImg.src = imgUrl;
-        revealImg.classList.add('active');
+      if (serviceRevealImg && window.innerWidth > 768) {
+        serviceRevealImg.src = imgUrl;
+        serviceRevealImg.classList.add('active');
       }
     });
     item.addEventListener('mouseleave', () => {
-      if (revealImg) revealImg.classList.remove('active');
+      if (serviceRevealImg) serviceRevealImg.classList.remove('active');
     });
 
-    // Re-add cursor hover
-    item.addEventListener(
-      'mouseenter',
-      () => cursor && cursor.classList.add('hovered')
-    );
-    item.addEventListener(
-      'mouseleave',
-      () => cursor && cursor.classList.remove('hovered')
-    );
+    // Cursor hover
+    item.addEventListener('mouseenter', () => cursor && cursor.classList.add('hovered'));
+    item.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hovered'));
 
-    // 3. CLICK OPEN MODAL LOGIC
+    // Click Open Modal
     item.addEventListener('click', () => {
       const key = item.getAttribute('data-key');
-      openMajorModal(key);
+      openServiceModal(key);
     });
   });
 }
 
-// 4. Modal Functions
-let modal = document.getElementById('majorModal');
-const modalBackdrop = document.getElementById('modalBackdrop');
-const closeBtns = document.querySelectorAll('.closeModalBtn');
+// 3. Modal Functions
+let serviceModal = document.getElementById('serviceModal');
+const serviceModalBackdrop = document.getElementById('serviceModalBackdrop');
+const closeServiceBtns = document.querySelectorAll('.closeServiceModalBtn');
 
-function openMajorModal(key) {
-  // RE-SELECT modal karena mungkin DOM-nya berubah setelah di-inject loader.js
-  modal = document.getElementById('majorModal');
+function openServiceModal(key) {
+  serviceModal = document.getElementById('serviceModal');
+  const data = servicesData[key];
+  if (!data || !serviceModal) return;
 
-  const data = majorsData[key];
-  if (!data || !modal) return;
-
-  // --- FIX STACKING CONTEXT ---
-  // Pindahkan modal ke body agar z-indexnya menang lawan Navbar
-  document.body.appendChild(modal);
-  // ---------------------------
+  document.body.appendChild(serviceModal);
 
   // Populate Data
-  document.getElementById('modalCategory').innerText = data.category;
-  document.getElementById('modalTitle').innerText = data.fullTitle;
-  document.getElementById('modalImg').src = data.img;
-  document.getElementById('modalDesc').innerText = data.desc;
-  document.getElementById('modalCareer').innerText = data.career;
+  document.getElementById('serviceModalCategory').innerText = data.category;
+  document.getElementById('serviceModalTitle').innerText = data.fullTitle;
+  document.getElementById('serviceModalImg').src = data.img;
+  document.getElementById('serviceModalDesc').innerText = data.desc;
+  document.getElementById('serviceModalCareer').innerText = data.career;
 
   // Populate Points
-  const pointsContainer = document.getElementById('modalPoints');
+  const pointsContainer = document.getElementById('serviceModalPoints');
   pointsContainer.innerHTML = '';
   data.points.forEach((point) => {
     const li = document.createElement('li');
     li.className = 'flex items-start text-gray-300';
-    li.innerHTML = `<i class="fa-solid fa-check text-accent mt-1 mr-3 text-sm"></i> <span>${point}</span>`;
+    li.innerHTML = `<i class="fa-solid fa-check text-accent mt-1 mr-3 text-sm flex-shrink-0"></i><span>${point}</span>`;
     pointsContainer.appendChild(li);
   });
 
-  // Show Modal
-  modal.classList.remove('hidden');
-  void modal.offsetWidth; // Force reflow
-  modal.classList.remove('opacity-0');
+  serviceModal.classList.remove('hidden');
+  void serviceModal.offsetWidth;
+  serviceModal.classList.remove('opacity-0');
 
-  // Stop Scroll
   lenis.stop();
   document.body.style.overflow = 'hidden';
 
-  // Animasi Konten
-  gsap.to('.modal-content-anim', {
+  gsap.to('.service-modal-content-anim', {
     y: 0,
     opacity: 1,
     duration: 0.8,
@@ -236,63 +235,50 @@ function openMajorModal(key) {
   });
 }
 
-function closeMajorModal() {
-  modal = document.getElementById('majorModal');
-  if (!modal) return;
+function closeServiceModal() {
+  serviceModal = document.getElementById('serviceModal');
+  if (!serviceModal) return;
 
-  modal.classList.add('opacity-0');
-  gsap.to('.modal-content-anim', { y: 20, opacity: 0, duration: 0.3 });
+  serviceModal.classList.add('opacity-0');
+  gsap.to('.service-modal-content-anim', { y: 20, opacity: 0, duration: 0.3 });
 
   setTimeout(() => {
-    modal.classList.add('hidden');
+    serviceModal.classList.add('hidden');
     lenis.start();
     document.body.style.overflow = '';
-
-    // Opsional: Kembalikan modal ke tempat asalnya jika perlu,
-    // tapi dibiarkan di body juga aman karena hidden.
   }, 500);
 }
 
-// Event Listeners buat Close
-closeBtns.forEach((btn) => btn.addEventListener('click', closeMajorModal));
-if (modalBackdrop) modalBackdrop.addEventListener('click', closeMajorModal);
+closeServiceBtns.forEach((btn) => btn.addEventListener('click', closeServiceModal));
+if (serviceModalBackdrop) serviceModalBackdrop.addEventListener('click', closeServiceModal);
 
-// Close on Escape Key
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-    closeMajorModal();
+  if (e.key === 'Escape' && serviceModal && !serviceModal.classList.contains('hidden')) {
+    closeServiceModal();
   }
 });
 
-// Timeline Drawing
-// ... kode sebelumnya ...
-
-// --- PPDB TIMELINE ANIMATION ---
-
-// 1. Animasi Garis Tengah (Progress Line)
+// --- HOWTO TIMELINE ANIMATION ---
 gsap.to('#ppdbProgressLine', {
   scrollTrigger: {
-    trigger: '#ppdb',
-    start: 'top 40%', // Mulai saat section PPDB hampir di tengah layar
-    end: 'bottom 80%', // Selesai saat bagian bawah hampir keluar
-    scrub: 1.5, // Smooth scrubbing
+    trigger: '#howto-section',
+    start: 'top 40%',
+    end: 'bottom 80%',
+    scrub: 1.5,
   },
-  height: '100%', // Isi tinggi garis dari 0 ke 100%
+  height: '100%',
   ease: 'none',
 });
 
-// 2. Animasi Cards (Muncul satu per satu)
 const ppdbSteps = document.querySelectorAll('.ppdb-step');
 ppdbSteps.forEach((step, index) => {
-  // Tentukan arah datang animasi (Ganjil dari kiri, Genap dari kanan)
-  // Kecuali di mobile (semua dari bawah/kiri)
   const xOffset = window.innerWidth > 768 ? (index % 2 === 0 ? -50 : 50) : 0;
   const yOffset = window.innerWidth > 768 ? 0 : 50;
 
   gsap.from(step.querySelector('.ppdb-card'), {
     scrollTrigger: {
       trigger: step,
-      start: 'top 85%', // Muncul saat elemen masuk 85% viewport
+      start: 'top 85%',
       toggleActions: 'play none none reverse',
     },
     opacity: 0,
@@ -302,8 +288,7 @@ ppdbSteps.forEach((step, index) => {
     ease: 'power3.out',
   });
 
-  // Animasi Angka Besar (01, 02...)
-  const bigNumber = step.querySelector('.font-display.text-8xl');
+  const bigNumber = step.querySelector('.font-display.text-7xl, .font-display.text-8xl');
   if (bigNumber) {
     gsap.from(bigNumber, {
       scrollTrigger: {
@@ -316,6 +301,32 @@ ppdbSteps.forEach((step, index) => {
       ease: 'back.out(1.7)',
     });
   }
+});
+
+// Testimonials Stagger Animation
+gsap.from('.news-card', {
+  scrollTrigger: {
+    trigger: '#testimonials-section',
+    start: 'top 70%',
+  },
+  y: 100,
+  opacity: 0,
+  stagger: 0.2,
+  duration: 1.2,
+  ease: 'power4.out',
+});
+
+// Certifications Badges Animation
+gsap.from('.cert-badge', {
+  scrollTrigger: {
+    trigger: '#certifications-section',
+    start: 'top 75%',
+  },
+  y: 50,
+  opacity: 0,
+  stagger: 0.1,
+  duration: 0.8,
+  ease: 'power3.out',
 });
 
 // Timeline Items Fade In
@@ -332,25 +343,12 @@ gsap.utils.toArray('.timeline-item').forEach((item) => {
   });
 });
 
-// News Stagger
-gsap.from('.news-card', {
-  scrollTrigger: {
-    trigger: '#berita',
-    start: 'top 70%',
-  },
-  y: 100,
-  opacity: 0,
-  stagger: 0.2,
-  duration: 1.2,
-  ease: 'power4.out',
-});
-
 // 4. Initialize Swiper
 const swiperEl = document.querySelector('.mySwiper');
 if (swiperEl) {
   const swiper = new Swiper('.mySwiper', {
     slidesPerView: 'auto',
-    spaceBetween: 30,
+    spaceBetween: 24,
     freeMode: true,
     navigation: {
       nextEl: '.swiper-next',
@@ -372,7 +370,6 @@ function toggleMobileMenu() {
   isMenuOpen = !isMenuOpen;
 
   if (isMenuOpen) {
-    // Open menu
     mobileMenu.classList.remove('translate-x-full');
     gsap.to(mobileLinks, {
       y: 0,
@@ -385,8 +382,8 @@ function toggleMobileMenu() {
     menuIcon.classList.add('fa-xmark');
     menuIcon.style.transform = 'rotate(90deg)';
     navBar.classList.remove('mix-blend-difference');
+    lenis.stop();
   } else {
-    // Close menu
     mobileMenu.classList.add('translate-x-full');
     gsap.to(mobileLinks, { y: '100%', duration: 0.1 });
     menuIcon.classList.remove('fa-xmark');
@@ -395,13 +392,13 @@ function toggleMobileMenu() {
     if (window.scrollY <= 50) {
       navBar.classList.add('mix-blend-difference');
     }
+    lenis.start();
   }
 }
 
 if (menuToggle && mobileMenu) {
   menuToggle.addEventListener('click', toggleMobileMenu);
 
-  // Close menu when link is clicked
   document.querySelectorAll('.mobile-link').forEach((link) => {
     link.addEventListener('click', () => {
       if (isMenuOpen) toggleMobileMenu();
@@ -412,6 +409,7 @@ if (menuToggle && mobileMenu) {
 // 6. Navbar Scroll Logic
 function handleNavbarScroll() {
   const nav = document.querySelector('nav');
+  if (!nav) return;
 
   if (window.scrollY > 50) {
     nav.classList.add('nav-scrolled');
@@ -443,13 +441,14 @@ if (galleryCards.length > 0) {
   });
 }
 
-// ... kode sebelumnya ...
-
-// --- STATS COUNTER ANIMATION ---
+// 8. Stats Counter Animation (with decimal support for 4.9★)
 const counters = document.querySelectorAll('.counter');
 
 counters.forEach((counter) => {
-  const target = +counter.getAttribute('data-target');
+  const rawTarget = +counter.getAttribute('data-target');
+  const isDecimal = counter.getAttribute('data-decimal') === 'true';
+  // If data-decimal, the value 49 represents 4.9
+  const target = isDecimal ? rawTarget / 10 : rawTarget;
   const obj = { val: 0 };
 
   gsap.to(obj, {
@@ -457,23 +456,24 @@ counters.forEach((counter) => {
     duration: 2.5,
     ease: 'power2.out',
     scrollTrigger: {
-      trigger: '#statsSection', // UPDATE: Sekarang trigger-nya pakai ID statsSection
-      start: 'top 80%', // Mulai animasi pas sectionnya masuk 80% viewport
+      trigger: '#statsSection',
+      start: 'top 80%',
       toggleActions: 'play none none none',
     },
     onUpdate: () => {
-      counter.innerText = Math.ceil(obj.val);
+      if (isDecimal) {
+        counter.innerText = obj.val.toFixed(1);
+      } else {
+        counter.innerText = Math.ceil(obj.val).toLocaleString('id-ID');
+      }
     },
   });
 });
-
-// ... kode-kode sebelumnya ...
 
 // --- THEME TOGGLE LOGIC ---
 const themeToggles = document.querySelectorAll('.theme-toggle');
 const html = document.documentElement;
 
-// 1. Cek Preference Awal (Local Storage atau System)
 const savedTheme = localStorage.getItem('theme');
 const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -483,13 +483,11 @@ if (savedTheme === 'light' || (!savedTheme && !systemDark)) {
   setTheme('dark');
 }
 
-// 2. Fungsi Set Theme
 function setTheme(mode) {
   if (mode === 'light') {
     html.setAttribute('data-theme', 'light');
     localStorage.setItem('theme', 'light');
 
-    // Update Icon: Show Moon, Hide Sun (karena di light mode kita mau switch ke dark)
     document
       .querySelectorAll('.light-icon')
       .forEach((el) => el.classList.add('hidden'));
@@ -497,14 +495,12 @@ function setTheme(mode) {
       .querySelectorAll('.dark-icon')
       .forEach((el) => el.classList.remove('hidden'));
 
-    // Ubah warna icon toggle jadi gelap biar kelihatan di bg putih
     themeToggles.forEach((btn) => btn.classList.add('text-gray-800'));
     themeToggles.forEach((btn) => btn.classList.remove('text-white'));
   } else {
     html.removeAttribute('data-theme');
     localStorage.setItem('theme', 'dark');
 
-    // Update Icon: Show Sun, Hide Moon
     document
       .querySelectorAll('.light-icon')
       .forEach((el) => el.classList.remove('hidden'));
@@ -512,13 +508,11 @@ function setTheme(mode) {
       .querySelectorAll('.dark-icon')
       .forEach((el) => el.classList.add('hidden'));
 
-    // Balikin warna icon jadi putih
     themeToggles.forEach((btn) => btn.classList.remove('text-gray-800'));
     themeToggles.forEach((btn) => btn.classList.add('text-white'));
   }
 }
 
-// 3. Event Listeners
 themeToggles.forEach((btn) => {
   btn.addEventListener('click', () => {
     const currentTheme = html.getAttribute('data-theme');

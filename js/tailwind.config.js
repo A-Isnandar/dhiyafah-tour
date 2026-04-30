@@ -2,14 +2,18 @@ tailwind.config = {
     theme: {
         extend: {
             colors: {
-                dark: '#0a0a0a',
-                primary: '#3b82f6', // Electric Blue
-                accent: '#eab308',  // Gold
+                dark: '#060D25',       // Deep Navy Dhiyafah
+                primary: '#0B1E59',    // Biru Navy Utama
+                accent: '#FFC000',     // Emas Dhiyafah
+                highlight: '#E60000',  // Merah Aksen
                 glass: 'rgba(255, 255, 255, 0.05)',
+                'navy-light': '#1A3080',
+                'gold-light': '#FFD54F',
             },
             fontFamily: {
-                sans: ['Space Grotesk', 'sans-serif'],
-                display: ['Syne', 'sans-serif'],
+                sans: ['Inter', 'sans-serif'],
+                display: ['Playfair Display', 'serif'],
+                mono: ['Space Grotesk', 'monospace'],
             },
             backgroundImage: {
                 'noise': "url('https://grainy-gradients.vercel.app/noise.svg')",

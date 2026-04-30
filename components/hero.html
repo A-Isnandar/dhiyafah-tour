@@ -1,45 +1,70 @@
 <section
   id="home"
-  class="relative h-screen flex items-center justify-center overflow-hidden"
+  class="relative min-h-screen flex items-center justify-center overflow-hidden"
 >
   <div class="absolute inset-0 z-0 scale-110" id="hero-bg">
     <img
-      src="/assets/img/yadika-hero.png"
-      alt="School Building"
-      class="w-full h-full object-cover opacity-40 grayscale contrast-125"
+      src="/assets/img/hero-kaabah.png"
+      alt="Masjidil Haram Makkah"
+      class="w-full h-full object-cover opacity-50 contrast-110"
     />
     <div
-      class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"
+      class="absolute inset-0 bg-gradient-to-t from-dark via-dark/60 to-dark/30"
     ></div>
+    <!-- Gold top line accent -->
+    <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-60"></div>
   </div>
 
-  <div class="relative z-10 text-center px-4 max-w-5xl">
+  <div class="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
     <p
-      class="font-sans text-primary tracking-[0.3em] uppercase mb-4 text-xl overflow-hidden"
+      class="font-sans text-accent tracking-[0.25em] sm:tracking-[0.3em] uppercase mb-3 sm:mb-4 text-sm sm:text-base overflow-hidden"
     >
-      <span class="hero-anim block translate-y-full">Kabupaten Tangerang</span>
+      <span class="hero-anim block translate-y-full">Managed by PT. Amanah Safari Internasional</span>
     </p>
     <h1
-      class="font-display text-6xl md:text-9xl font-bold tracking-tighter leading-[0.9] mb-6"
+      class="font-display text-5xl sm:text-7xl md:text-9xl font-bold tracking-tighter leading-[0.9] mb-4 sm:mb-6"
     >
       <div class="overflow-hidden">
-        <span class="hero-anim block translate-y-full">SMK YADIKA</span>
+        <span class="hero-anim block translate-y-full">DHIYAFAH</span>
       </div>
       <div class="overflow-hidden">
         <span
-          class="hero-anim block translate-y-full text-outline hover:text-white transition-colors duration-500"
-          >SEPULUH</span
+          class="hero-anim block translate-y-full text-outline-gold hover:text-white transition-colors duration-500"
+          >TOUR</span
         >
       </div>
     </h1>
-    <p class="font-sans text-gray-400 max-w-lg mx-auto overflow-hidden">
+    <p class="font-sans text-gray-300 max-w-xl mx-auto overflow-hidden text-sm sm:text-base px-4">
       <span class="hero-anim block translate-y-full delay-100"
-        >Membentuk Generasi Unggul, Berkarakter, dan Berdaya Saing Global.</span
+        >Perjalanan Suci Menuju Tanah Haram — Umrah, Haji & Tour Muslim Terpercaya.</span
       >
     </p>
+
+    <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center overflow-hidden px-4">
+      <span class="hero-anim block translate-y-full w-full sm:w-auto">
+        <a
+          href="https://wa.me/6282176275013?text=Assalamualaikum,%20saya%20ingin%20mendaftar%20Umrah"
+          target="_blank" rel="noopener"
+          class="group relative inline-flex items-center justify-center gap-3 px-7 sm:px-8 py-3 sm:py-4 bg-accent text-dark font-sans font-bold text-xs sm:text-sm uppercase tracking-widest overflow-hidden rounded-full hover:shadow-[0_0_30px_rgba(255,192,0,0.4)] transition-all duration-300 w-full sm:w-auto"
+        >
+          <i class="fa-brands fa-whatsapp text-base sm:text-lg"></i>
+          <span class="relative z-10">Daftar Umrah Sekarang</span>
+          <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+        </a>
+      </span>
+      <span class="hero-anim block translate-y-full w-full sm:w-auto">
+        <a
+          href="#services-section"
+          class="group inline-flex items-center justify-center gap-3 px-7 sm:px-8 py-3 sm:py-4 border border-white/30 text-white font-sans font-medium text-xs sm:text-sm uppercase tracking-widest rounded-full hover:bg-white/10 hover:border-white/60 transition-all duration-300 backdrop-blur-sm w-full sm:w-auto"
+        >
+          <span>Lihat Paket</span>
+          <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </span>
+    </div>
   </div>
 
-  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-    <i class="fa-solid fa-arrow-down text-white/50"></i>
+  <div class="absolute bottom-8 sm:bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+    <i class="fa-solid fa-arrow-down text-white/40 text-sm"></i>
   </div>
 </section>
