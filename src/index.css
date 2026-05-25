@@ -1,0 +1,451 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================ */
+/* variables.css                    */
+/* ================================ */
+:root {
+  --cursor-size: 20px;
+}
+
+/* ================================ */
+/* layout.css                       */
+/* ================================ */
+html, body {
+  width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  cursor: none;
+  background-color: #060D25;
+  color: #f3f4f6;
+}
+
+/* Noise Overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom Cursor */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  mix-blend-mode: difference;
+}
+
+.cursor.hovered {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+  backdrop-filter: blur(2px);
+}
+
+/* --- FIX MOBILE CURSOR --- */
+@media (max-width: 768px) {
+  .cursor {
+    display: none !important;
+  }
+  body {
+    cursor: auto !important;
+  }
+  .hoverable:hover {
+    cursor: pointer;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursor {
+    display: none !important;
+  }
+  body {
+    cursor: auto !important;
+  }
+}
+
+/* ================================ */
+/* components.css                   */
+/* ================================ */
+
+/* Loader */
+.loader {
+  position: fixed;
+  inset: 0;
+  background: #060D25;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Navigation & Typography */
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  color: transparent;
+}
+
+/* Gold text outline for hero "TOUR" */
+.text-outline-gold {
+  -webkit-text-stroke: 2px #FFC000;
+  color: transparent;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #FFC000;
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Navbar Scrolled State */
+nav {
+  transition: all 0.3s ease;
+}
+
+nav.nav-scrolled {
+  background-color: rgba(6, 13, 37, 0.88);
+  backdrop-filter: blur(16px);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  mix-blend-mode: normal !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 192, 0, 0.1);
+}
+
+/* ================================ */
+/* sections.css                     */
+/* ================================ */
+
+/* === Timeline Line === */
+.timeline-line {
+  width: 2px;
+  background: linear-gradient(to bottom, #ffc000, #0b1e59);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  height: 0%;
+}
+
+/* === Hover Reveal Section (Services/Layanan) === */
+.service-item {
+  transition: opacity 0.3s;
+}
+.services-container:hover .service-item {
+  opacity: 0.3;
+}
+.services-container .service-item:hover {
+  opacity: 1;
+}
+
+.service-reveal-img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 350px;
+  height: 450px;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition:
+    opacity 0.3s,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: grayscale(60%);
+}
+.service-reveal-img.active {
+  opacity: 0.5;
+  transform: translate(-50%, -50%) scale(1) rotate(2deg);
+}
+
+/* === EXPANDING GALLERY === */
+.gallery-card {
+  flex: 1;
+}
+.gallery-card.active {
+  flex: 5;
+}
+
+@media (min-width: 768px) {
+  #expandingGallery:hover .gallery-card.active {
+    flex: 1;
+  }
+  #expandingGallery .gallery-card:hover {
+    flex: 5 !important;
+  }
+}
+
+/* Gallery Text Logic */
+.gallery-text {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  transition-delay: 0.1s;
+}
+.gallery-card.active .gallery-text {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .gallery-card:hover .gallery-text {
+    opacity: 1 !important;
+  }
+  #expandingGallery:hover .gallery-card.active:not(:hover) .gallery-text {
+    opacity: 0 !important;
+    transition-delay: 0s;
+  }
+  .vertical-title {
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+  .gallery-card:hover .vertical-title,
+  .gallery-card.active:not(
+      #expandingGallery:hover .gallery-card.active:not(:hover)
+    )
+    .vertical-title {
+    opacity: 0;
+  }
+  #expandingGallery:hover .gallery-card.active:not(:hover) .vertical-title {
+    opacity: 1;
+    transition-delay: 0.2s;
+  }
+}
+
+/* === SERVICE MODAL === */
+#serviceModal {
+  cursor: auto;
+}
+#serviceModal ::-webkit-scrollbar {
+  width: 6px;
+}
+#serviceModal ::-webkit-scrollbar-track {
+  background: #040c1e;
+}
+#serviceModal ::-webkit-scrollbar-thumb {
+  background: #1a3080;
+  border-radius: 4px;
+}
+#serviceModal ::-webkit-scrollbar-thumb:hover {
+  background: #ffc000;
+}
+
+/* === HOWTO TIMELINE BIG NUMBER COLOR === */
+#howto-section .text-white\/5 {
+  color: rgb(255 192 0 / 15%) !important; /* Dinaikkan dari 8% ke 15% untuk mode dark */
+}
+
+[data-theme='light'] #howto-section .text-white\/5 {
+  color: rgb(255 192 0 / 22%) !important; /* Dinaikkan ke 22% di mode light agar terlihat di background putih */
+}
+
+/* === CERTIFICATION BADGES GLOW ON HOVER === */
+.cert-badge:hover {
+  box-shadow: 0 8px 32px rgba(255, 192, 0, 0.1);
+}
+
+/* === WA Floating Button pulse animation === */
+.wa-floating-btn {
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+@keyframes wa-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+  }
+}
+
+/* ================================ */
+/* theme.css                        */
+/* ================================ */
+
+/* === LIGHT MODE OVERRIDES === */
+
+[data-theme='light'] body {
+  background-color: #f0f4ff;
+  color: #0B1E59;
+}
+
+/* 1. Backgrounds */
+[data-theme='light'] .bg-dark,
+[data-theme='light'] .bg-black,
+[data-theme='light'] .bg-\[\#0c0c0c\],
+[data-theme='light'] .bg-\[\#040c1e\],
+[data-theme='light'] .bg-\[\#030a18\] {
+  background-color: #ffffff !important;
+}
+
+/* 2. Typography */
+[data-theme='light'] .text-white {
+  color: #0B1E59 !important;
+}
+
+[data-theme='light'] .text-gray-300,
+[data-theme='light'] .text-gray-400,
+[data-theme='light'] .text-gray-500 {
+  color: #3a4e7a !important;
+}
+
+[data-theme='light'] .text-gray-600 {
+  color: #6b7fa8 !important;
+}
+
+/* 3. Cards & Borders */
+[data-theme='light'] .border-gray-800,
+[data-theme='light'] .border-gray-900,
+[data-theme='light'] .border-white\/5,
+[data-theme='light'] .border-white\/10 {
+  border-color: #d4daf0 !important;
+}
+
+[data-theme='light'] .bg-white\/5 {
+  background-color: rgba(11, 30, 89, 0.04) !important;
+  border: 1px solid rgba(11, 30, 89, 0.1);
+}
+
+[data-theme='light'] .bg-white\/10 {
+  background-color: rgba(11, 30, 89, 0.08) !important;
+}
+
+/* 4. Navbar Specific */
+[data-theme='light'] nav.nav-scrolled {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 30px rgba(11, 30, 89, 0.08);
+}
+
+[data-theme='light'] nav {
+  mix-blend-mode: normal !important;
+  color: #0B1E59;
+}
+
+[data-theme='light'] nav a,
+[data-theme='light'] nav span {
+  color: #0B1E59 !important;
+}
+
+[data-theme='light'] .text-accent {
+  color: #c8960a !important;
+}
+
+/* 5. Components */
+[data-theme='light'] .loader {
+  background-color: #f0f4ff !important;
+}
+
+/* Modal Background */
+[data-theme='light'] #serviceModal .bg-dark {
+  background-color: #ffffff !important;
+  color: #0B1E59 !important;
+}
+
+[data-theme='light'] .bg-gray-900 {
+  background-color: #eef1fb !important;
+}
+
+/* 6. Gallery Area */
+[data-theme='light'] #expandingGallery .text-white,
+[data-theme='light'] #expandingGallery .text-gray-300,
+[data-theme='light'] #expandingGallery .text-gray-400,
+[data-theme='light'] #expandingGallery .text-gray-500 {
+  color: #ffffff !important;
+}
+
+/* 7. Swiper Slider */
+[data-theme='light'] .swiper-slide .text-white,
+[data-theme='light'] .swiper-slide .text-gray-300,
+[data-theme='light'] .swiper-slide .text-gray-400 {
+  color: #ffffff !important;
+}
+
+/* 8. Hero Section */
+[data-theme='light'] #home .text-white,
+[data-theme='light'] #home .text-gray-300,
+[data-theme='light'] #home .text-gray-400 {
+  color: #ffffff !important;
+}
+
+/* 9. Mobile Menu Light Mode */
+[data-theme='light'] #mobileMenu {
+  background-color: #ffffff !important;
+}
+[data-theme='light'] #mobileMenu a {
+  color: #0B1E59 !important;
+}
+
+/* 10. Testimonial & Certification cards */
+[data-theme='light'] .cert-badge,
+[data-theme='light'] .news-card > div {
+  background-color: rgba(11, 30, 89, 0.04) !important;
+  border-color: rgba(11, 30, 89, 0.12) !important;
+}
+
+/* 11. Footer */
+[data-theme='light'] footer.bg-\[\#030a18\] {
+  background-color: #0B1E59 !important;
+}
+[data-theme='light'] footer .text-gray-500,
+[data-theme='light'] footer .text-gray-600 {
+  color: rgba(255,255,255,0.6) !important;
+}
+[data-theme='light'] footer .text-white {
+  color: #ffffff !important;
+}
+
+/* 12. Service Cards in Light Mode */
+[data-theme='light'] .service-card .text-white {
+  color: #4A85E6 !important; /* Warna biru terang/lebih cerah untuk judul layanan */
+}
+[data-theme='light'] .service-card:hover .text-white {
+  color: #c8960a !important; /* Berubah menjadi warna emas/accent saat dihover */
+}
+[data-theme='light'] .service-card .text-gray-300 {
+  color: #e5e7eb !important; /* Abu-abu terang agar tulisan deskripsi mudah dibaca di background gelap */
+}
+
+/* ================================ */
+/* Logo Icon                        */
+/* ================================ */
+
+/* Dark mode (default): turn the logo white to match the white "Dhiyafah" text */
+.logo-icon {
+  filter: brightness(0) invert(1);
+  transition: filter 0.3s ease;
+}
+
+/* Light mode (navbar): show original logo colors (blue, yellow, red) */
+[data-theme='light'] .logo-icon {
+  filter: none;
+}
+
+/* Footer is always on a dark background — keep logo white regardless of theme */
+footer .logo-icon-footer {
+  filter: brightness(0) invert(1) !important;
+}

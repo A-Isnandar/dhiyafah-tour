@@ -1,0 +1,51 @@
+import React from 'react'
+
+const Vision = () => {
+  return (
+    <section id="vision-section" className="py-10 sm:py-32 px-4 sm:px-6 bg-dark relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-12 items-center">
+        <div className="relative h-[50vh] sm:h-[60vh] overflow-hidden group order-2 md:order-1">
+          <div className="absolute inset-0 bg-accent mix-blend-color z-10 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+          {/* Gold border frame */}
+          <div className="absolute inset-0 z-10 pointer-events-none border border-accent/20 m-4"></div>
+          <img
+            src="/assets/img/vision-jamaah.png"
+            alt="Jamaah Dhiyafah Tour di Masjidil Haram"
+            className="w-full h-full object-cover brightness-75 scale-110"
+            id="vision-image"
+          />
+        </div>
+
+        <div className="relative z-10 order-1 md:order-2">
+          <i className="fa-solid fa-star-and-crescent text-3xl sm:text-4xl text-accent mb-5 sm:mb-6 opacity-70 block"></i>
+          <span className="text-accent font-sans tracking-[0.25em] uppercase text-xs sm:text-sm font-semibold mb-3 block">Visi &amp; Misi Kami</span>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight" id="vision-quote">
+            {'"Menjadi mitra perjalanan ibadah terpercaya yang menghadirkan layanan prima, ikhlas, dan penuh amanah."'
+              .split(' ')
+              .map((word, index) => (
+                <span key={index} className="inline-block opacity-0 translate-y-4 quote-word">
+                  {word}&nbsp;
+                </span>
+              ))}
+          </h2>
+          <p className="mt-4 sm:mt-6 font-sans text-base sm:text-lg text-gray-400 font-light">— PT. Dhiyafah Ar-Rihlah Internasional</p>
+
+          <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 sm:p-5 border border-accent/20 rounded-xl bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-accent/50 transition-all duration-300">
+              <i className="fa-solid fa-kaaba text-accent text-xl sm:text-2xl mb-3 block"></i>
+              <h3 className="font-sans font-semibold text-white text-sm mb-1">Visi</h3>
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">Menjadi travel umrah &amp; haji terdepan yang dikenal dengan layanan amanah dan jamaah yang puas.</p>
+            </div>
+            <div className="p-4 sm:p-5 border border-accent/20 rounded-xl bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-accent/50 transition-all duration-300">
+              <i className="fa-solid fa-hand-holding-heart text-accent text-xl sm:text-2xl mb-3 block"></i>
+              <h3 className="font-sans font-semibold text-white text-sm mb-1">Misi</h3>
+              <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">Memberikan pelayanan ibadah yang mudah, nyaman, aman, dan sesuai syariat Islam.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default Vision
