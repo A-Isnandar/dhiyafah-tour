@@ -13,6 +13,8 @@ import Howto from './components/Howto'
 import Testimonials from './components/Testimonials'
 import Certifications from './components/Certifications'
 import Footer from './components/Footer'
+// 1. IMPORT PROMO POPUP DI SINI
+import PromoPopup from './components/PromoPopup'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -59,8 +61,6 @@ function App() {
     })
 
     // 3. GSAP Animations
-
-    const mainContainerRef = document.documentElement // We can scope to whole app
     const ctx = gsap.context(() => {
       // Loader Animation
       const loaderTimeline = gsap.timeline()
@@ -198,6 +198,7 @@ function App() {
         const obj = { val: 0 }
 
         gsap.to(obj, {
+          box: target,
           val: target,
           duration: 2.5,
           ease: 'power2.out',
@@ -254,6 +255,9 @@ function App() {
         <Certifications />
         <Footer />
       </main>
+
+      {/* 2. PANGGIL DI SINI AGAR LAYER POP-UP PROMO DI PALING ATAS */}
+      <PromoPopup />
     </>
   )
 }

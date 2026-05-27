@@ -1,70 +1,241 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
+/* ═══════════════════════════════════════════════════════ */
+/*  Helper Components                                     */
+/* ═══════════════════════════════════════════════════════ */
+
+const StarRating = ({ rating, maxStars = 5 }) => (
+  <div className="flex items-center gap-0.5">
+    {Array.from({ length: maxStars }, (_, i) => (
+      <i
+        key={i}
+        className={`fa-star text-xs ${
+          i < rating ? 'fa-solid text-accent' : 'fa-regular text-gray-600'
+        }`}
+      ></i>
+    ))}
+  </div>
+)
+
+const AccordionItem = ({ title, children, isOpen, onToggle }) => (
+  <div className="mb-3 overflow-hidden rounded-lg">
+    <button
+      onClick={onToggle}
+      className="w-full flex items-center justify-between px-5 py-3.5 bg-primary border-l-4 border-accent text-white font-bold text-sm sm:text-base tracking-wide hover:bg-primary/80 transition-all duration-300"
+    >
+      <span>{title}</span>
+      <i
+        className={`fa-solid fa-chevron-down text-accent text-xs transition-transform duration-300 ${
+          isOpen ? 'rotate-180' : ''
+        }`}
+      ></i>
+    </button>
+    <div
+      className={`transition-all duration-500 ease-in-out overflow-hidden ${
+        isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'
+      }`}
+    >
+      <div className="p-5 bg-white/5 border border-white/10 border-t-0 rounded-b-lg">
+        {children}
+      </div>
+    </div>
+  </div>
+)
+
+/* ═══════════════════════════════════════════════════════ */
+/*  Services Data                                         */
+/* ═══════════════════════════════════════════════════════ */
+
 const servicesData = {
-  'umrah-reguler': {
-    category: 'PAKET UMRAH',
-    title: 'Umrah Reguler',
-    fullTitle: 'Umrah Reguler',
+  umroh: {
+    category: 'PAKET UMROH',
+    title: 'Umroh',
+    fullTitle: 'Paket Umroh',
     img: '/assets/img/gallery-umrah.png',
-    desc: 'Paket umrah terjangkau dengan jadwal keberangkatan rutin, fasilitas lengkap, dan pendampingan mutawwif berpengalaman. Cocok untuk jamaah yang menginginkan perjalanan ibadah yang fokus dan khusyuk.',
-    points: [
-      'Hotel bintang 3–4 dekat Masjidil Haram & Masjid Nabawi',
-      'Tiket pesawat PP dengan maskapai terpercaya',
-      'Mutawwif berpengalaman & bersertifikat',
-      'Visa umrah resmi & asuransi perjalanan',
-      'Konsumsi 3x sehari selama di tanah suci',
+    desc: 'Paket umroh terjangkau dengan jadwal keberangkatan rutin, fasilitas lengkap, dan pendampingan mutawwif berpengalaman. Cocok untuk jamaah yang menginginkan perjalanan ibadah yang fokus dan khusyuk.',
+    jenisPaket: 'UMRAH REGULER',
+    maskapai: 'Saudi Airlines',
+    hotelMakkah: { nama: 'Grand Zamzam', bintang: 4 },
+    hotelMadinah: { nama: 'Dallah Taibah', bintang: 4 },
+    hotelLabels: { makkah: 'Makkah', madinah: 'Madinah' },
+    penerbangan: {
+      berangkat: { dari: 'CGK', ke: 'JED' },
+      kembali: { dari: 'JED', ke: 'CGK' },
+    },
+    itinerary: [
+      'Hari 1 : JAKARTA – JEDDAH\nJamaah berkumpul di Bandara Soekarno-Hatta untuk keberangkatan. Setiba di Jeddah, jamaah diarahkan untuk pemeriksaan imigrasi lalu melanjutkan perjalanan menuju Madinah.',
+      'Hari 2 : MADINAH\nCheck-in hotel Madinah. Jamaah melaksanakan sholat di Masjid Nabawi dan ziarah ke Makam Rasulullah SAW.',
+      'Hari 3 : ZIARAH MADINAH\nZiarah kota Madinah mengunjungi Jabal Uhud, Masjid Quba, Kebun Kurma, dan tempat-tempat bersejarah lainnya.',
+      'Hari 4 : MADINAH\nJamaah bebas beribadah di Masjid Nabawi. Melaksanakan Sholat Sunnah dan berdoa di Raudhah.',
+      'Hari 5 : MADINAH – MAKKAH\nCheck-out hotel Madinah, perjalanan menuju Makkah. Check-in hotel Makkah dan melaksanakan ibadah Umrah (Thawaf, Sa\'i, dan Tahallul).',
+      'Hari 6 : MAKKAH\nMemperbanyak ibadah di Masjidil Haram (Free Program).',
+      'Hari 7 : ZIARAH MAKKAH\nZiarah kota Makkah mengunjungi Padang Arafah, Jabal Rahmah, Muzdalifah, Mina, dan Jabal Tsur.',
+      'Hari 8 : MAKKAH\nMemperbanyak ibadah di Masjidil Haram (Free Program).',
+      'Hari 9 : MAKKAH – JEDDAH – JAKARTA\nTawaf Wada, check-out hotel, menuju Airport Jeddah untuk penerbangan kembali ke Tanah Air.',
     ],
-    career: 'Akomodasi, transportasi, konsumsi, visa, asuransi, bimbingan ibadah, dan perlengkapan umrah (kain ihram, buku panduan).',
-  },
-  'umrah-plus': {
-    category: 'UMRAH PLUS DESTINASI',
-    title: 'Umrah Plus',
-    fullTitle: 'Umrah Plus (Turki / Aqsa / Kairo)',
-    img: '/assets/img/gallery-istanbul.png',
-    desc: 'Gabungkan ibadah umrah dengan wisata ke destinasi-destinasi peradaban Islam yang menakjubkan — Istanbul Turki, Masjidil Aqsa Palestina, atau Kairo Mesir. Sebuah perjalanan spiritual yang tak terlupakan.',
-    points: [
-      'Semua fasilitas Umrah Reguler Premium',
-      'Tambahan destinasi wisata Islam (Turki / Aqsa / Kairo)',
-      'Hotel bintang 4–5 di semua destinasi',
-      'Tour guide lokal berbahasa Indonesia',
-      'Jadwal kunjungan situs sejarah Islam',
+    fasilitas: [
+      'Tour Leader sejak keberangkatan dari Tanah Air',
+      'Tiket Pesawat Domestik PP',
+      'Tiket Pesawat Internasional PP',
+      'Transportasi / Bus ber AC',
+      'Visa Umroh',
+      'Akomodasi / Hotel sesuai Paket (makan 3x sehari fullboard)',
+      'Manasik Umroh, Muthawwif B.Indonesia',
+      'Air Zam-zam 5 Liter / Orang (apabila diizinkan)',
+      'Ziarah Madinah & Makkah',
+      'Perlengkapan Umroh dan Asuransi Perjalanan',
     ],
-    career: 'Paket all-inclusive: Umrah lengkap + tiket antar destinasi, hotel di semua kota, tour guide lokal, dan dokumentasi perjalanan.',
+    persyaratan: [
+      'Paspor asli dengan masa berlaku minimal 7 bulan',
+      'Foto berwarna ukuran 4x6 (8 lembar) dengan latar belakang putih',
+      'Fotokopi KTP & Kartu Keluarga',
+      'Buku Vaksin Meningitis (suntik meningitis)',
+      'Surat Mahram (untuk wanita di bawah 45 tahun tanpa pendamping)',
+      'Akte Lahir / Surat Nikah (untuk pasangan suami istri)',
+      'Membayar uang muka (DP) sesuai ketentuan',
+    ],
+    syaratKetentuan: [
+      'Pembayaran DP minimal 30% dari total harga paket saat pendaftaran.',
+      'Pelunasan dilakukan selambat-lambatnya 1 bulan sebelum keberangkatan.',
+      'Pembatalan setelah pelunasan dikenakan biaya administrasi sesuai kebijakan.',
+      'Perubahan jadwal keberangkatan mengikuti ketersediaan seat maskapai.',
+      'Harga paket dapat berubah sewaktu-waktu mengikuti kurs dan kebijakan maskapai.',
+      'Peserta wajib mengikuti seluruh rangkaian manasik yang dijadwalkan.',
+      'Dhiyafah Tour tidak bertanggung jawab atas keterlambatan yang disebabkan oleh pihak ketiga (maskapai, imigrasi, dll).',
+    ],
   },
+
   haji: {
     category: 'IBADAH HAJI',
     title: 'Paket Haji',
     fullTitle: 'Paket Haji Reguler & Plus',
     img: '/assets/img/gallery-haji.png',
     desc: 'Layanan haji lengkap dengan pendampingan penuh dari keberangkatan hingga kepulangan. Tim Dhiyafah Tour memastikan setiap jamaah dapat menjalani ibadah haji dengan khusyuk, aman, dan sesuai syariat.',
-    points: [
-      'Pendampingan mutawwif & pembimbing ibadah bersertifikat',
-      'Hotel dekat Masjidil Haram (Makkah) & Masjid Nabawi (Madinah)',
-      'Transportasi premium antar kota suci',
-      'Konsultasi kesehatan & pendampingan jamaah lansia',
-      'Laporan perkembangan jamaah real-time kepada keluarga',
+    jenisPaket: 'HAJI REGULER & PLUS',
+    maskapai: 'Garuda Indonesia',
+    hotelMakkah: { nama: 'Hilton Suites Makkah', bintang: 5 },
+    hotelMadinah: { nama: 'Millennium Al Aqeeq', bintang: 5 },
+    hotelLabels: { makkah: 'Makkah', madinah: 'Madinah' },
+    penerbangan: {
+      berangkat: { dari: 'CGK', ke: 'MED' },
+      kembali: { dari: 'JED', ke: 'CGK' },
+    },
+    itinerary: [
+      'Hari 1 : JAKARTA – MADINAH\nJamaah berkumpul di Bandara Soekarno-Hatta. Penerbangan langsung menuju Madinah.',
+      'Hari 2 : MADINAH\nCheck-in hotel. Ziarah Masjid Nabawi, Makam Rasulullah SAW, dan Raudhah.',
+      'Hari 3–5 : ZIARAH MADINAH\nProgram ibadah dan ziarah kota Madinah. Kunjungan ke Jabal Uhud, Masjid Quba, Kebun Kurma.',
+      'Hari 6 : MADINAH – MAKKAH\nPerjalanan menuju Makkah. Check-in hotel dan melaksanakan Umrah Wajib.',
+      'Hari 7 : MAKKAH\nFree program memperbanyak ibadah di Masjidil Haram.',
+      'Hari 8 : TARWIYAH – ARAFAH\nMenuju Arafah untuk Wukuf (rukun haji terbesar).',
+      'Hari 9 : MUZDALIFAH – MINA\nMabit di Muzdalifah, melontar Jumrah Aqobah di Mina.',
+      'Hari 10–11 : MINA\nMelontar Jumrah Ula, Wustha, dan Aqobah. Mabit di Mina.',
+      'Hari 12 : MAKKAH\nKembali ke Makkah, Thawaf Ifadhah dan Sa\'i.',
+      'Hari 13–15 : MAKKAH\nFree program, memperbanyak ibadah di Masjidil Haram.',
+      'Hari 16 : MAKKAH – JEDDAH – JAKARTA\nThawaf Wada, menuju bandara untuk penerbangan pulang ke Tanah Air.',
     ],
-    career: 'Layanan end-to-end: pengurusan dokumen haji, akomodasi premium, konsumsi, transportasi, perlengkapan, dan pendampingan penuh selama di tanah suci.',
+    fasilitas: [
+      'Tour Leader & Pembimbing Ibadah berpengalaman',
+      'Tiket Pesawat PP (Internasional)',
+      'Transportasi Bus ber AC selama di Tanah Suci',
+      'Visa Haji Resmi',
+      'Akomodasi Hotel bintang 5 di Makkah & Madinah',
+      'Konsumsi 3x sehari (Fullboard)',
+      'Perlengkapan Haji lengkap',
+      'Asuransi Perjalanan',
+      'Air Zam-zam 5 Liter / Orang (apabila diizinkan)',
+      'Tenda VIP di Arafah & Mina',
+      'Pendampingan Kesehatan (Dokter & Paramedis)',
+    ],
+    persyaratan: [
+      'Memiliki nomor porsi haji yang masih aktif',
+      'Paspor asli dengan masa berlaku minimal 7 bulan',
+      'Foto berwarna ukuran 4x6 (8 lembar) latar belakang putih',
+      'Fotokopi KTP & Kartu Keluarga',
+      'Surat Keterangan Sehat dari dokter',
+      'Buku Vaksin Meningitis',
+      'Akte Lahir / Surat Nikah',
+      'Membayar biaya sesuai ketentuan Kemenag RI',
+    ],
+    syaratKetentuan: [
+      'Pendaftaran haji berdasarkan nomor porsi dan kuota Kemenag RI.',
+      'Pembayaran BPIH (Biaya Penyelenggaraan Ibadah Haji) sesuai ketentuan pemerintah.',
+      'Pelunasan biaya tambahan (upgrade) dilakukan sebelum keberangkatan.',
+      'Jadwal keberangkatan mengikuti ketetapan Kemenag RI.',
+      'Pembatalan dikenakan biaya sesuai kebijakan yang berlaku.',
+      'Peserta wajib mengikuti manasik haji yang diselenggarakan.',
+      'Dhiyafah Tour tidak bertanggung jawab atas perubahan jadwal oleh pihak berwenang.',
+    ],
+  },
+
+  'tour-muslim': {
+    category: 'TOUR MUSLIM',
+    title: 'Tour Muslim',
+    fullTitle: 'Tour Muslim — Wisata Peradaban Islam',
+    img: '/assets/img/gallery-istanbul.png',
+    desc: 'Jelajahi jejak peradaban Islam di kota-kota bersejarah dunia. Dari megahnya Istanbul, kemegahan Kairo, hingga keagungan Cordoba dan Granada — sebuah perjalanan wisata religi yang memperkaya wawasan dan iman.',
+    jenisPaket: 'TOUR MUSLIM PREMIUM',
+    maskapai: 'Turkish Airlines',
+    hotelMakkah: { nama: 'Hilton Istanbul Bosphorus', bintang: 5 },
+    hotelMadinah: { nama: 'Steigenberger Hotel El Tahrir', bintang: 5 },
+    hotelLabels: { makkah: 'Istanbul', madinah: 'Kairo' },
+    penerbangan: {
+      berangkat: { dari: 'CGK', ke: 'IST' },
+      kembali: { dari: 'CAI', ke: 'CGK' },
+    },
+    itinerary: [
+      'Hari 1 : JAKARTA – ISTANBUL\nPenerbangan menuju Istanbul, Turki. Tiba dan transfer menuju hotel untuk istirahat.',
+      'Hari 2 : ISTANBUL\nKunjungan ke Hagia Sophia, Blue Mosque (Sultan Ahmed Camii), dan Topkapi Palace.',
+      'Hari 3 : ISTANBUL\nKunjungan ke Grand Bazaar, Basilica Cistern, dan Masjid Suleymaniye. Cruise di Selat Bosphorus.',
+      'Hari 4 : ISTANBUL – KAIRO\nPenerbangan menuju Kairo, Mesir. Check-in hotel dan istirahat.',
+      'Hari 5 : KAIRO\nKunjungan ke Piramida Giza, Sphinx, dan Museum Mesir.',
+      'Hari 6 : KAIRO\nKunjungan ke Masjid Al-Azhar, Masjid Amr Ibn Al-Ash, dan Khan El-Khalili Bazaar.',
+      'Hari 7 : KAIRO\nCity tour Kairo Islami: Benteng Salahuddin, Masjid Muhammad Ali, dan kawasan Al-Muizz.',
+      'Hari 8 : KAIRO – JAKARTA\nFree program, belanja oleh-oleh, transfer ke bandara untuk penerbangan pulang.',
+      'Hari 9 : TIBA DI JAKARTA\nTiba di Indonesia dengan kenangan dan wawasan yang tak terlupakan.',
+    ],
+    fasilitas: [
+      'Tour Leader berpengalaman dari Indonesia',
+      'Tiket Pesawat PP (Internasional & Antar Destinasi)',
+      'Transportasi Bus ber AC di setiap destinasi',
+      'Visa Turki & Mesir',
+      'Akomodasi Hotel bintang 4–5 di semua destinasi',
+      'Konsumsi 3x sehari (Fullboard)',
+      'Tour Guide lokal berbahasa Indonesia',
+      'Tiket masuk seluruh tempat wisata sesuai itinerary',
+      'Asuransi Perjalanan',
+      'Dokumentasi perjalanan profesional',
+    ],
+    persyaratan: [
+      'Paspor asli dengan masa berlaku minimal 7 bulan',
+      'Foto berwarna ukuran 4x6 (6 lembar) latar belakang putih',
+      'Fotokopi KTP',
+      'Mengisi formulir pendaftaran',
+      'Membayar uang muka (DP) sesuai ketentuan',
+    ],
+    syaratKetentuan: [
+      'Pembayaran DP minimal 30% dari total harga paket.',
+      'Pelunasan dilakukan selambat-lambatnya 3 minggu sebelum keberangkatan.',
+      'Pembatalan kurang dari 14 hari sebelum keberangkatan dikenakan biaya 50%.',
+      'Pembatalan kurang dari 7 hari sebelum keberangkatan tidak dapat di-refund.',
+      'Perubahan jadwal mengikuti ketersediaan seat maskapai.',
+      'Harga dapat berubah sewaktu-waktu mengikuti kurs mata uang.',
+    ],
   },
 }
 
+/* ═══════════════════════════════════════════════════════ */
+/*  Card Grid Items (Front-facing cards)                  */
+/* ═══════════════════════════════════════════════════════ */
+
 const serviceItems = [
   {
-    key: 'umrah-reguler',
+    key: 'umroh',
     img: '/assets/img/gallery-umrah.png',
-    label: 'UMRAH',
-    title: 'Umrah Reguler',
+    label: 'UMROH',
+    title: 'Umroh',
     subtitle: 'Paket Terjangkau · Jadwal Rutin · Fasilitas Lengkap',
     titleClass: 'font-display text-4xl sm:text-6xl md:text-8xl font-bold text-gray-300 group-hover:text-white transition-colors duration-300',
-  },
-  {
-    key: 'umrah-plus',
-    img: '/assets/img/gallery-istanbul.png',
-    label: 'UMRAH PLUS',
-    title: 'Umrah Plus',
-    subtitle: 'Turki · Aqsa · Kairo · Destinasi Tambahan',
-    titleClass: 'font-display text-4xl sm:text-5xl md:text-8xl font-bold text-gray-300 group-hover:text-white transition-colors duration-300',
   },
   {
     key: 'haji',
@@ -74,7 +245,19 @@ const serviceItems = [
     subtitle: 'Haji Reguler & Plus · Pendampingan Penuh',
     titleClass: 'font-display text-4xl sm:text-5xl md:text-8xl font-bold text-gray-300 group-hover:text-white transition-colors duration-300',
   },
+  {
+    key: 'tour-muslim',
+    img: '/assets/img/gallery-istanbul.png',
+    label: 'TOUR MUSLIM',
+    title: 'Tour Muslim',
+    subtitle: 'Istanbul · Kairo · Andalusia · Kota Bersejarah',
+    titleClass: 'font-display text-4xl sm:text-5xl md:text-8xl font-bold text-gray-300 group-hover:text-white transition-colors duration-300',
+  },
 ]
+
+/* ═══════════════════════════════════════════════════════ */
+/*  Services Component                                    */
+/* ═══════════════════════════════════════════════════════ */
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -85,6 +268,10 @@ const Services = () => {
   const [touchStart, setTouchStart] = useState(null)
   const [touchEnd, setTouchEnd] = useState(null)
   const minSwipeDistance = 50
+
+  // Detail toggle & accordion states
+  const [showDetail, setShowDetail] = useState(false)
+  const [openAccordions, setOpenAccordions] = useState({})
 
   const handleTouchStart = (e) => {
     setTouchEnd(null)
@@ -99,10 +286,7 @@ const Services = () => {
     if (!touchStart || !touchEnd) return
     const distance = touchStart - touchEnd
     const isRightSwipe = distance < -minSwipeDistance
-
-    if (isRightSwipe) {
-      closeModal()
-    }
+    if (isRightSwipe) closeModal()
   }
 
   const openModal = (key) => {
@@ -111,9 +295,10 @@ const Services = () => {
 
     setSelectedService(data)
     setIsModalOpen(true)
+    setShowDetail(false)
+    setOpenAccordions({})
     document.body.style.overflow = 'hidden'
 
-    // Animate modal content in
     setTimeout(() => {
       gsap.to('.service-modal-content-anim', {
         y: 0,
@@ -130,6 +315,8 @@ const Services = () => {
     setTimeout(() => {
       setIsModalOpen(false)
       setSelectedService(null)
+      setShowDetail(false)
+      setOpenAccordions({})
       document.body.style.overflow = ''
     }, 500)
   }
@@ -144,6 +331,321 @@ const Services = () => {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isModalOpen])
+
+  const toggleAccordion = (key) => {
+    setOpenAccordions((prev) => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  /* ─── Shared Modal Content Renderer ─── */
+  const renderModalContent = () => {
+    if (!selectedService) return null
+    const s = selectedService
+
+    return (
+      <>
+        {/* ── A. Category & Title ── */}
+        <span className="text-accent tracking-[0.3em] uppercase text-xs md:text-sm font-bold block mb-3">
+          {s.category}
+        </span>
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight text-white">
+          {s.fullTitle}
+        </h2>
+        <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-8 font-light border-l-2 border-accent pl-4 md:pl-6">
+          {s.desc}
+        </p>
+
+        {/* ── B. Info Summary Box ── */}
+        <div className="border border-white/15 rounded-xl p-5 sm:p-6 mb-6 bg-white/[0.03]">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+            {/* Hotel Makkah / Istanbul */}
+            <div>
+              <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 font-semibold">
+                Hotel {s.hotelLabels?.makkah || 'Makkah'}
+              </p>
+              <p className="text-white font-semibold text-xs sm:text-sm mb-1">
+                <i className="fa-solid fa-hotel text-accent mr-1.5 text-[10px] sm:text-xs"></i>
+                {s.hotelMakkah.nama}
+              </p>
+              <StarRating rating={s.hotelMakkah.bintang} />
+            </div>
+
+            {/* Hotel Madinah / Cairo */}
+            <div>
+              <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 font-semibold">
+                Hotel {s.hotelLabels?.madinah || 'Madinah'}
+              </p>
+              <p className="text-white font-semibold text-xs sm:text-sm mb-1">
+                <i className="fa-solid fa-hotel text-accent mr-1.5 text-[10px] sm:text-xs"></i>
+                {s.hotelMadinah.nama}
+              </p>
+              <StarRating rating={s.hotelMadinah.bintang} />
+            </div>
+
+            {/* Jenis Paket */}
+            <div>
+              <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 font-semibold">
+                Jenis Paket
+              </p>
+              <p className="text-white font-bold text-xs sm:text-sm">{s.jenisPaket}</p>
+            </div>
+
+            {/* Maskapai */}
+            <div>
+              <p className="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest mb-1.5 font-semibold">
+                Maskapai
+              </p>
+              <p className="text-white font-semibold text-xs sm:text-sm">
+                <i className="fa-solid fa-plane-departure text-accent mr-1.5 text-[10px] sm:text-xs"></i>
+                {s.maskapai}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── C. Detail Toggle Button ── */}
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setShowDetail(!showDetail)}
+            className="text-accent font-semibold text-sm hover:text-accent/80 transition-colors inline-flex items-center gap-2 hoverable"
+          >
+            <span className="underline underline-offset-4 decoration-accent/40">
+              {showDetail ? 'Sembunyikan Informasi Detail' : 'Tampilkan Informasi Detail'}
+            </span>
+            <i
+              className={`fa-solid fa-chevron-down text-xs transition-transform duration-300 ${
+                showDetail ? 'rotate-180' : ''
+              }`}
+            ></i>
+          </button>
+        </div>
+
+        {/* ── Expanded Detail Content ── */}
+        <div
+          className={`transition-all duration-500 ease-in-out overflow-hidden ${
+            showDetail ? 'max-h-[3000px] opacity-100 mb-8' : 'max-h-0 opacity-0 mb-0'
+          }`}
+        >
+          {/* Informasi Hotel */}
+          <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-4">
+            <i className="fa-solid fa-bed text-accent mr-2"></i>Informasi Hotel
+          </h4>
+
+          {/* Hotel Card 1 */}
+          <div className="border border-white/10 rounded-xl p-4 sm:p-5 mb-4 bg-white/[0.03] relative">
+            <span className="absolute top-3 right-3 px-3 py-1 bg-accent/20 text-accent text-[10px] font-bold uppercase tracking-widest rounded-full">
+              {s.hotelLabels?.makkah || 'Makkah'}
+            </span>
+            <p className="text-white font-bold text-base mb-1">{s.hotelMakkah.nama}</p>
+            <StarRating rating={s.hotelMakkah.bintang} />
+            <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-white/10">
+              <div>
+                <p className="text-gray-500 text-xs mb-1">Check-In :</p>
+                <p className="text-gray-400 text-sm">
+                  <i className="fa-regular fa-calendar text-accent mr-1.5 text-xs"></i>—
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs mb-1">Check-Out :</p>
+                <p className="text-gray-400 text-sm">
+                  <i className="fa-regular fa-calendar text-accent mr-1.5 text-xs"></i>—
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Hotel Card 2 */}
+          <div className="border border-white/10 rounded-xl p-4 sm:p-5 mb-6 bg-white/[0.03] relative">
+            <span className="absolute top-3 right-3 px-3 py-1 bg-accent/20 text-accent text-[10px] font-bold uppercase tracking-widest rounded-full">
+              {s.hotelLabels?.madinah || 'Madinah'}
+            </span>
+            <p className="text-white font-bold text-base mb-1">{s.hotelMadinah.nama}</p>
+            <StarRating rating={s.hotelMadinah.bintang} />
+            <div className="grid grid-cols-2 gap-4 mt-3 pt-3 border-t border-white/10">
+              <div>
+                <p className="text-gray-500 text-xs mb-1">Check-In :</p>
+                <p className="text-gray-400 text-sm">
+                  <i className="fa-regular fa-calendar text-accent mr-1.5 text-xs"></i>—
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500 text-xs mb-1">Check-Out :</p>
+                <p className="text-gray-400 text-sm">
+                  <i className="fa-regular fa-calendar text-accent mr-1.5 text-xs"></i>—
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Informasi Pesawat */}
+          <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-4">
+            <i className="fa-solid fa-plane text-accent mr-2"></i>Informasi Pesawat
+          </h4>
+
+          {/* Flight Card — Berangkat */}
+          <div className="border border-white/10 rounded-xl p-4 sm:p-5 mb-4 bg-white/[0.03] relative">
+            <span className="absolute top-3 right-3 px-3 py-1 bg-green-500/20 text-green-400 text-[10px] font-bold uppercase tracking-widest rounded-full">
+              Berangkat
+            </span>
+            <p className="text-accent font-bold text-sm sm:text-base mb-3">{s.maskapai}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2.5">
+                <i className="fa-solid fa-plane-departure text-gray-500 text-sm"></i>
+                <div>
+                  <p className="text-gray-400 text-sm">
+                    <i className="fa-regular fa-calendar text-xs mr-1"></i>—
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    <i className="fa-solid fa-location-dot text-xs mr-1"></i>{s.penerbangan.berangkat.dari}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <i className="fa-solid fa-plane-arrival text-gray-500 text-sm"></i>
+                <div>
+                  <p className="text-gray-400 text-sm">
+                    <i className="fa-regular fa-calendar text-xs mr-1"></i>—
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    <i className="fa-solid fa-location-dot text-xs mr-1"></i>{s.penerbangan.berangkat.ke}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Flight Card — Kembali */}
+          <div className="border border-white/10 rounded-xl p-4 sm:p-5 bg-white/[0.03] relative">
+            <span className="absolute top-3 right-3 px-3 py-1 bg-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-widest rounded-full">
+              Kembali
+            </span>
+            <p className="text-accent font-bold text-sm sm:text-base mb-3">{s.maskapai}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2.5">
+                <i className="fa-solid fa-plane-departure text-gray-500 text-sm"></i>
+                <div>
+                  <p className="text-gray-400 text-sm">
+                    <i className="fa-regular fa-calendar text-xs mr-1"></i>—
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    <i className="fa-solid fa-location-dot text-xs mr-1"></i>{s.penerbangan.kembali.dari}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <i className="fa-solid fa-plane-arrival text-gray-500 text-sm"></i>
+                <div>
+                  <p className="text-gray-400 text-sm">
+                    <i className="fa-regular fa-calendar text-xs mr-1"></i>—
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    <i className="fa-solid fa-location-dot text-xs mr-1"></i>{s.penerbangan.kembali.ke}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── D. Accordion Sections ── */}
+        <div className="mb-8">
+          {/* Itinerary */}
+          <AccordionItem
+            title="Itinerary"
+            isOpen={!!openAccordions['itinerary']}
+            onToggle={() => toggleAccordion('itinerary')}
+          >
+            <div className="space-y-4">
+              {s.itinerary.map((item, i) => {
+                const parts = item.split('\n')
+                const dayTitle = parts[0]
+                const dayDesc = parts.slice(1).join(' ')
+                return (
+                  <div key={i} className="border-l-2 border-accent/30 pl-4">
+                    <p className="text-white font-bold text-sm mb-1">{dayTitle}</p>
+                    {dayDesc && (
+                      <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
+                        {dayDesc}
+                      </p>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </AccordionItem>
+
+          {/* Fasilitas */}
+          <AccordionItem
+            title="Fasilitas"
+            isOpen={!!openAccordions['fasilitas']}
+            onToggle={() => toggleAccordion('fasilitas')}
+          >
+            <div>
+              <p className="text-white font-bold text-sm uppercase tracking-widest mb-3">
+                Harga Termasuk
+              </p>
+              <ul className="space-y-2.5">
+                {s.fasilitas.map((item, i) => (
+                  <li key={i} className="flex items-start text-gray-300 text-sm">
+                    <i className="fa-solid fa-check text-accent mt-0.5 mr-2.5 text-xs flex-shrink-0"></i>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </AccordionItem>
+
+          {/* Persyaratan Peserta */}
+          <AccordionItem
+            title="Persyaratan Peserta"
+            isOpen={!!openAccordions['persyaratan']}
+            onToggle={() => toggleAccordion('persyaratan')}
+          >
+            <ul className="space-y-2.5">
+              {s.persyaratan.map((item, i) => (
+                <li key={i} className="flex items-start text-gray-300 text-sm">
+                  <i className="fa-solid fa-circle-check text-accent mt-0.5 mr-2.5 text-xs flex-shrink-0"></i>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionItem>
+
+          {/* Syarat & Ketentuan */}
+          <AccordionItem
+            title="Syarat & Ketentuan"
+            isOpen={!!openAccordions['syaratKetentuan']}
+            onToggle={() => toggleAccordion('syaratKetentuan')}
+          >
+            <ol className="space-y-2.5">
+              {s.syaratKetentuan.map((item, i) => (
+                <li key={i} className="flex items-start text-gray-300 text-sm">
+                  <span className="text-accent font-bold mr-2.5 text-xs mt-0.5 flex-shrink-0 w-4 text-right">
+                    {i + 1}.
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ol>
+          </AccordionItem>
+        </div>
+
+        {/* ── E. WhatsApp CTA ── */}
+        <a
+          href={`https://wa.me/6282176275013?text=Assalamualaikum,%20saya%20tertarik%20dengan%20paket%20${encodeURIComponent(s.title)}`}
+          target="_blank"
+          rel="noopener"
+          className="group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-dark font-sans font-bold text-xs sm:text-sm uppercase tracking-widest rounded-full hover:bg-gold-light transition-all duration-300 hoverable"
+        >
+          <i className="fa-brands fa-whatsapp text-base sm:text-lg"></i>
+          <span>Tanya via WhatsApp</span>
+        </a>
+      </>
+    )
+  }
+
+  /* ═════════════════════════════════════════ */
+  /*  Component Render                        */
+  /* ═════════════════════════════════════════ */
 
   return (
     <section className="py-24 sm:py-32 relative bg-dark z-20 overflow-hidden" id="services-section">
@@ -175,16 +677,16 @@ const Services = () => {
                 alt={item.title}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0"
               />
-              
+
               {/* Overlay Gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#030a18] via-[#030a18]/80 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
+
               {/* Top Section - Label */}
               <div className="absolute top-0 left-0 w-full p-6 sm:p-8 flex justify-between items-start z-10">
                 <span className="inline-block px-4 py-1.5 bg-accent/20 border border-accent/40 text-accent font-mono text-[10px] sm:text-xs tracking-widest uppercase rounded-full backdrop-blur-md">
                   {item.label}
                 </span>
-                
+
                 <div className="w-10 h-10 rounded-full border border-white/20 bg-black/30 backdrop-blur-sm flex items-center justify-center text-white group-hover:bg-accent group-hover:text-dark group-hover:border-accent transition-all duration-300">
                   <i className="fa-solid fa-arrow-right -rotate-45"></i>
                 </div>
@@ -198,7 +700,7 @@ const Services = () => {
                 <p className="text-gray-300 text-sm sm:text-base leading-relaxed line-clamp-3">
                   {item.subtitle}
                 </p>
-                
+
                 <div className="mt-6 flex items-center gap-3 text-xs sm:text-sm font-sans font-semibold uppercase tracking-widest text-accent opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 delay-100">
                   <span>Lihat Detail Program</span>
                   <i className="fa-solid fa-arrow-right-long"></i>
@@ -209,7 +711,9 @@ const Services = () => {
         </div>
       </div>
 
-      {/* Service Modal */}
+      {/* ════════════════════════════════════════ */}
+      {/*  Service Detail Modal                   */}
+      {/* ════════════════════════════════════════ */}
       {isModalOpen && selectedService && (
         <div
           id="serviceModal"
@@ -219,91 +723,65 @@ const Services = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
+          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-dark/95 backdrop-blur-xl"
             id="serviceModalBackdrop"
             onClick={closeModal}
           ></div>
 
+          {/* Close button — below navbar on desktop, smaller */}
           <button
-            className="fixed top-4 right-4 md:top-10 md:right-10 z-[100000] w-10 h-10 md:w-14 md:h-14 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white flex items-center justify-center hover:bg-white hover:text-black transition-all active:scale-95 closeServiceModalBtn shadow-lg"
+            className="fixed top-4 right-4 md:top-[5.5rem] md:right-6 z-[100000] w-10 h-10 md:w-11 md:h-11 bg-black/60 backdrop-blur-md border border-white/20 rounded-full text-white flex items-center justify-center hover:bg-white hover:text-black transition-all active:scale-95 closeServiceModalBtn shadow-lg"
             onClick={closeModal}
           >
-            <i className="fa-solid fa-xmark text-lg md:text-2xl"></i>
+            <i className="fa-solid fa-xmark text-base md:text-lg"></i>
           </button>
 
-          <div className="absolute inset-0 overflow-y-auto overflow-x-hidden">
-            <div className="min-h-full flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 h-[35vh] md:h-auto relative shrink-0">
-                <button
-                  className="md:hidden absolute top-4 left-4 z-[100000] w-10 h-10 bg-black/50 backdrop-blur-md border border-white/20 rounded-full text-white flex items-center justify-center active:scale-95 shadow-lg"
-                  onClick={closeModal}
-                >
-                  <i className="fa-solid fa-arrow-left"></i>
-                </button>
+          {/* Mobile back button — fixed below navbar */}
+          <button
+            className="md:hidden fixed top-[4.5rem] left-4 z-[100000] w-10 h-10 bg-black/60 backdrop-blur-md border border-white/20 rounded-full text-white flex items-center justify-center active:scale-95 shadow-lg hover:bg-white/20 transition-all"
+            onClick={closeModal}
+          >
+            <i className="fa-solid fa-arrow-left text-sm"></i>
+          </button>
+
+          {/* ── Mobile Layout — stacked, full scroll ── */}
+          <div className="absolute inset-0 overflow-y-auto overflow-x-hidden md:hidden">
+            <div className="min-h-full flex flex-col">
+              <div className="w-full h-[35vh] relative shrink-0">
                 <img
                   src={selectedService.img}
-                  id="serviceModalImg"
                   alt={selectedService.fullTitle}
-                  className="absolute inset-0 w-full h-full object-cover grayscale md:grayscale-0"
+                  className="absolute inset-0 w-full h-full object-cover grayscale"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent md:hidden"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent"></div>
               </div>
 
-              <div className="w-full md:w-1/2 p-6 sm:p-10 md:p-20 relative bg-dark">
-                <div className="max-w-xl service-modal-content-anim translate-y-10 opacity-0 pt-6 md:pt-0 pb-16 md:pb-0">
-                  <span
-                    id="serviceModalCategory"
-                    className="text-accent tracking-[0.3em] uppercase text-xs md:text-sm font-bold block mb-4"
-                  >
-                    {selectedService.category}
-                  </span>
-                  <h2
-                    id="serviceModalTitle"
-                    className="font-display text-3xl sm:text-4xl md:text-6xl font-bold mb-4 sm:mb-6 leading-tight text-white"
-                  >
-                    {selectedService.fullTitle}
-                  </h2>
+              <div className="w-full p-6 sm:p-10 relative bg-dark">
+                <div className="service-modal-content-anim translate-y-10 opacity-0 pt-4 pb-16">
+                  {renderModalContent()}
+                </div>
+              </div>
+            </div>
+          </div>
 
-                  <p
-                    id="serviceModalDesc"
-                    className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6 sm:mb-8 font-light border-l-2 border-accent pl-4 md:pl-6"
-                  >
-                    {selectedService.desc}
-                  </p>
+          {/* ── Desktop Layout — fixed split pane, right scrolls ── */}
+          <div className="hidden md:flex absolute inset-0 flex-row">
+            {/* Left: fixed image */}
+            <div className="w-1/2 h-full relative shrink-0">
+              <img
+                src={selectedService.img}
+                alt={selectedService.fullTitle}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
 
-                  <div className="mb-8 sm:mb-10">
-                    <h4 className="text-white font-bold uppercase tracking-widest mb-4 text-xs md:text-sm">
-                      Keunggulan Paket Ini
-                    </h4>
-                    <ul id="serviceModalPoints" className="space-y-3 md:space-y-4 text-sm md:text-base">
-                      {selectedService.points.map((point, index) => (
-                        <li key={index} className="flex items-start text-gray-300">
-                          <i className="fa-solid fa-check text-accent mt-1 mr-3 text-sm flex-shrink-0"></i>
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="p-4 sm:p-6 bg-white/5 rounded-xl border border-accent/20">
-                    <h4 className="text-white font-bold mb-2 text-sm md:text-base">
-                      <i className="fa-solid fa-gift text-accent mr-2"></i>Yang Didapat Jamaah
-                    </h4>
-                    <p id="serviceModalCareer" className="text-gray-400 text-xs sm:text-sm">
-                      {selectedService.career}
-                    </p>
-                  </div>
-
-                  <a
-                    href="https://wa.me/6282176275013?text=Assalamualaikum,%20saya%20tertarik%20dengan%20paket%20ini"
-                    target="_blank"
-                    rel="noopener"
-                    className="mt-6 sm:mt-8 group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-accent text-dark font-sans font-bold text-xs sm:text-sm uppercase tracking-widest rounded-full hover:bg-gold-light transition-all duration-300"
-                  >
-                    <i className="fa-brands fa-whatsapp text-base sm:text-lg"></i>
-                    <span>Tanya via WhatsApp</span>
-                  </a>
+            {/* Right: scrollable content */}
+            <div className="w-1/2 h-full overflow-y-auto bg-dark">
+              <div className="p-10 lg:p-14 xl:p-16">
+                <div className="max-w-xl service-modal-content-anim translate-y-10 opacity-0">
+                  {renderModalContent()}
                 </div>
               </div>
             </div>

@@ -366,6 +366,12 @@ nav.nav-scrolled {
   color: #0B1E59 !important;
 }
 
+/* Modal: keep white text on dark-bg elements (accordion bars, badges, etc.) */
+[data-theme='light'] #serviceModal .bg-primary .text-white,
+[data-theme='light'] #serviceModal .bg-primary.text-white {
+  color: #ffffff !important;
+}
+
 [data-theme='light'] .bg-gray-900 {
   background-color: #eef1fb !important;
 }
