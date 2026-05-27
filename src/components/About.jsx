@@ -104,7 +104,7 @@ const About = () => {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-50 group-hover:brightness-90 group-[.active]:brightness-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
-              <div className="gallery-text absolute bottom-0 left-0 p-5 sm:p-8 w-full">
+              <div className="gallery-text absolute bottom-0 left-0 p-5 sm:p-8 w-full z-10">
                 <span className="text-accent tracking-widest uppercase text-xs font-bold mb-2 block">{item.category}</span>
                 <h3 className="font-display text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2 leading-none">
                   {item.title}
@@ -112,6 +112,13 @@ const About = () => {
                 <p className="text-white text-xs sm:text-sm md:text-base max-w-xs line-clamp-3">
                   {item.desc}
                 </p>
+              </div>
+              
+              {/* Title when NOT active on mobile */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none md:hidden opacity-100 group-[.active]:opacity-0 transition-opacity duration-300 z-10">
+                <h3 className="font-display text-base font-bold text-white tracking-[0.15em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  {item.title}
+                </h3>
               </div>
               <div className="vertical-title absolute bottom-8 left-8 origin-bottom-left -rotate-90 hidden md:block">
                 <h3 className="font-display text-2xl font-bold text-white/40 tracking-widest whitespace-nowrap">
