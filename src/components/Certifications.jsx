@@ -57,18 +57,18 @@ const Certifications = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="flex flex-wrap justify-center items-stretch gap-4 sm:gap-6">
           {certifications.map((cert, index) => (
             <div
               key={index}
-              className={`cert-badge group p-5 sm:p-6 rounded-2xl border border-accent/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-accent/50 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center gap-3 sm:gap-4 cursor-default ${cert.extraClass}`}
+              className="cert-badge group w-[45%] sm:w-[30%] lg:w-[18%] min-w-[140px] p-5 sm:p-6 rounded-2xl border border-accent/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-accent/50 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center gap-3 sm:gap-4 cursor-default"
             >
-              <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full border flex items-center justify-center transition-colors ${cert.iconColorClass}`}>
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full border flex items-center justify-center transition-colors ${cert.iconColorClass}`}>
                 <i className={`fa-solid ${cert.icon} ${cert.iconTextClass} text-xl sm:text-2xl`}></i>
               </div>
-              <div>
-                <h3 className="font-sans font-bold text-white text-xs sm:text-sm mb-1">{cert.title}</h3>
-                <p className="text-gray-500 text-[10px] sm:text-xs leading-snug">{cert.desc}</p>
+              <div className="flex flex-col flex-grow justify-start">
+                <h3 className="font-sans font-bold text-white text-xs sm:text-sm mb-1 sm:mb-2">{cert.title}</h3>
+                <p className="text-gray-500 text-[10px] sm:text-xs leading-relaxed">{cert.desc}</p>
               </div>
             </div>
           ))}

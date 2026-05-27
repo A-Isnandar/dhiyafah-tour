@@ -177,17 +177,21 @@ function App() {
       })
 
       // Certifications Badges Animation
-      gsap.from('.cert-badge', {
-        scrollTrigger: {
-          trigger: '#certifications-section',
-          start: 'top 75%',
-        },
-        y: 50,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: 'power3.out',
-      })
+      gsap.fromTo(
+        '.cert-badge',
+        { y: 50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: '#certifications-section',
+            start: 'top 80%',
+          },
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 0.8,
+          ease: 'power3.out',
+        }
+      )
 
       // Stats Counter Animation
       const counters = gsap.utils.toArray('.counter')
